@@ -1,0 +1,2338 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>GO DARIUS</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+  :root { font-family:'Nunito', 'Segoe UI', system-ui, -apple-system, sans-serif; }
+  body { background:linear-gradient(180deg,#62bfff 0%, #93c5fd 48%, #f9a8d4 100%); min-height:100vh; color:#1e293b; transition:background 1s; overflow-x:hidden; }
+  body.t-space { background:linear-gradient(180deg,#0f172a 0%, #1e1b4b 50%, #4c1d95 100%); }
+  body.t-bruja { background:linear-gradient(180deg,#4c1d95 0%, #6d28d9 45%, #312073 100%); }
+  body.t-escuela { background:linear-gradient(180deg,#fbbf24 0%, #f97316 45%, #fca5a5 100%); }
+  body.t-neon { background:linear-gradient(180deg,#0c0a1e 0%, #2e1065 45%, #155e75 100%); }
+  body.t-futbol { background:linear-gradient(180deg,#16a34a 0%, #22c55e 45%, #86efac 100%); }
+  body.t-mar { background:linear-gradient(180deg,#0891b2 0%, #0ea5e9 45%, #67e8f9 100%); }
+  body.girl { background:linear-gradient(180deg,#fce7f3 0%, #e9d5ff 45%, #fbcfe8 100%); }
+  body.girl .card { border-color:#f9a8d4; }
+  body.girl .wemoji, body.girl .avatar { filter:hue-rotate(280deg) saturate(1.2); }
+  body.girl .bigbtn, body.girl .qopt { background:#ec4899; }
+  body.girl .tabbtns button.sel { background:#db2777; border-color:#db2777; }
+  body.t-estrellas { background:linear-gradient(180deg,#1e1b4b 0%, #312e81 40%, #7c3aed 100%); }
+
+  /* Nubes decorativas animadas en CSS puro */
+  .bg-cloud { position:fixed; background:rgba(255,255,255,.32); border-radius:60px; pointer-events:none; z-index:0; animation:cloudFloat linear infinite; }
+  .bg-cloud::before, .bg-cloud::after { content:""; position:absolute; background:rgba(255,255,255,.32); border-radius:50%; }
+  .bg-cloud.c1 { width:135px; height:42px; top:7%; left:-150px; animation-duration:34s; }
+  .bg-cloud.c1::before { width:60px; height:60px; top:-28px; left:20px; }
+  .bg-cloud.c1::after { width:48px; height:48px; top:-18px; left:66px; }
+  .bg-cloud.c2 { width:175px; height:50px; top:58%; left:-200px; animation-duration:44s; animation-delay:6s; }
+  .bg-cloud.c2::before { width:76px; height:76px; top:-36px; left:28px; }
+  .bg-cloud.c2::after { width:58px; height:58px; top:-22px; left:92px; }
+  @keyframes cloudFloat { from { transform:translateX(0); } to { transform:translateX(120vw); } }
+
+  #app { max-width:1040px; margin:0 auto; padding:12px 16px 86px; position:relative; z-index:1; }
+
+  @keyframes screenIn { from { opacity:0; transform:translateX(40px) scale(.98);} to { opacity:1; transform:none;} }
+  @keyframes screenInBack { from { opacity:0; transform:translateX(-40px) scale(.98);} to { opacity:1; transform:none;} }
+  @keyframes pop { 0%{transform:scale(.5);opacity:0} 60%{transform:scale(1.15)} 100%{transform:scale(1);opacity:1} }
+  @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+  @keyframes jump { 0%,100%{transform:translateY(0) scale(1)} 30%{transform:translateY(-24px) scale(1.05)} 60%{transform:translateY(0) scale(.96)} }
+  @keyframes wiggle { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+  @keyframes fall { to { transform:translateY(110vh) rotate(720deg); opacity:.6; } }
+  @keyframes starfly { 0%{transform:scale(1)} 50%{transform:scale(1.6) rotate(15deg)} 100%{transform:scale(1)} }
+  @keyframes shine { 0%,100%{filter:drop-shadow(0 0 0 gold)} 50%{filter:drop-shadow(0 0 12px gold)} }
+  @keyframes progress { from { width:0 } }
+  @keyframes zoombg { from{opacity:0; transform:scale(.5)} to{opacity:1; transform:scale(1)} }
+  .screen-anim { animation:screenIn .35s cubic-bezier(.2,.8,.3,1); }
+  .screen-anim.back { animation:screenInBack .35s cubic-bezier(.2,.8,.3,1); }
+  .pop { animation:pop .3s ease-out; }
+  .floaty { animation:floaty 3s ease-in-out infinite; }
+  .jump { animation:jump 1.2s ease-in-out infinite; }
+
+  /* Cabecera Unificada Compacta */
+  .topbar { display:flex; align-items:center; gap:12px; margin-bottom:10px; background:rgba(255,255,255,.94); padding:10px 16px; border-radius:24px; border:3px solid #fff; box-shadow:0 6px 0 rgba(22,47,89,.12); flex-wrap:wrap; }
+  body.t-space .topbar, body.t-neon .topbar, body.t-estrellas .topbar { background:rgba(30,41,59,.94); border-color:#475569; }
+  .avatar { width:58px; height:58px; border-radius:50%; background:#fff9db; display:flex; align-items:center; justify-content:center; font-size:32px; border:4px solid #fbbf24; box-shadow:0 4px 10px rgba(0,0,0,.12); position:relative; flex-shrink:0; cursor:pointer; }
+  .avatar .hat { position:absolute; top:-14px; font-size:20px; }
+  .hello { flex:1; min-width:220px; }
+  .hello-row { display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .hello h1 { font-family:'Fredoka',sans-serif; font-size:23px; font-weight:700; color:#1e293b; }
+  body.t-space .hello h1, body.t-neon .hello h1, body.t-estrellas .hello h1 { color:#f8fafc; }
+  .speech-pill { background:#e0f2fe; border:2px solid #7dd3fc; color:#0369a1; font-size:12.5px; font-weight:800; padding:3px 11px; border-radius:14px; display:inline-flex; align-items:center; gap:5px; }
+  body.t-space .speech-pill, body.t-neon .speech-pill, body.t-estrellas .speech-pill { background:#1e1b4b; border-color:#6366f1; color:#e0e7ff; }
+  .hello .lvlbadge { display:inline-block; background:linear-gradient(90deg,#fbbf24,#f59e0b); color:#78350f; font-weight:900; font-size:11.5px; padding:3px 11px; border-radius:99px; margin-top:4px; }
+  .starbox { background:#fff9db; border:3px solid #fbbf24; border-bottom-width:5px; border-radius:99px; padding:6px 16px; font-family:'Fredoka',sans-serif; font-weight:700; font-size:19px; color:#b45309; display:flex; align-items:center; gap:6px; }
+  .starbox.fly { animation:starfly .6s ease; }
+  .starbox .st { font-size:20px; animation:shine 2.5s infinite; }
+  .dragonbtn { position:fixed; bottom:16px; right:14px; z-index:110; width:62px; height:62px; border:none; border-radius:50%; background:#fff; font-size:32px; box-shadow:0 6px 0 #d97706, 0 8px 18px rgba(0,0,0,.28); cursor:pointer; border:3px solid #fbbf24; }
+  .dragonbtn:active { transform:translateY(3px); }
+
+  .card { background:rgba(255,255,255,.95); border-radius:24px; padding:14px 18px; border:3px solid #fff; box-shadow:0 6px 0 rgba(22,47,89,.12); margin-bottom:12px; }
+  body.t-space .card, body.t-neon .card, body.t-estrellas .card { background:rgba(30,41,59,.92); color:#f1f5f9; border-color:#334155; }
+  .card h2 { font-family:'Fredoka',sans-serif; font-size:17px; font-weight:700; margin-bottom:8px; color:#1e293b; display:flex; align-items:center; gap:6px; }
+  body.t-space .card h2, body.t-neon .card h2, body.t-estrellas .card h2 { color:#a5b4fc; }
+
+  /* Misión de hoy en fila horizontal de 3 columnas */
+  .missions-header { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+  .missions-header h2 { margin-bottom:0; }
+  .missions-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  @media (max-width:720px){ .missions-grid { grid-template-columns:1fr; } }
+  .mission-item { display:flex; align-items:center; gap:10px; padding:9px 12px; font-weight:800; font-size:14px; background:#f8fafc; border:2px solid #e2e8f0; border-bottom-width:5px; border-radius:16px; cursor:pointer; transition:transform .12s, background .15s; color:#1e293b; }
+  .mission-item:hover { transform:translateY(-2px); background:#f1f5f9; border-color:#cbd5e1; }
+  .mission-item:active { transform:translateY(2px); }
+  .mission-item .mcheck { width:26px; height:26px; border-radius:50%; border:3px solid #cbd5e1; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:14px; background:#fff; }
+  .mission-item.done { background:#dcfce7; border-color:#4ade80; color:#15803d; }
+  .mission-item.done .mcheck { background:#22c55e; border-color:#16a34a; color:#fff; }
+  .giftrow { display:inline-flex; align-items:center; gap:8px; background:#fef9c3; border:2px solid #fde047; border-radius:12px; padding:4px 12px; font-weight:900; font-size:12.5px; color:#854d0e; }
+  .giftrow.ready { background:#22c55e; border-color:#16a34a; color:#fff; animation:wiggle 1s infinite; }
+
+  /* Cinta de Mapa de Mundos con Alto Contraste */
+  .sectiontitle { display:flex; justify-content:center; margin:6px 0 10px; }
+  .sectiontitle span { background:#162f59; color:#fff; font-family:'Fredoka',sans-serif; font-size:14.5px; letter-spacing:.5px; padding:6px 22px; border-radius:99px; border:2px solid #93c5fd; box-shadow:0 4px 0 rgba(0,0,0,.2); }
+
+  /* Mapa de Mundos con estilo de Botones 3D */
+  .map { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; padding:2px 0 14px; }
+  .world { position:relative; z-index:1; width:100%; margin:0; border:3px solid rgba(255,255,255,.35); border-radius:24px; padding:16px 12px 14px; display:flex; flex-direction:column; align-items:center; justify-content:space-between; gap:6px; cursor:pointer; box-shadow:0 7px 0 rgba(0,0,0,.28), 0 10px 18px rgba(0,0,0,.15); transition:transform .12s, box-shadow .12s; text-align:center; min-height:148px; }
+  .world:hover { transform:translateY(-4px); }
+  .world:active { transform:translateY(4px); box-shadow:0 3px 0 rgba(0,0,0,.28); }
+  .world .wemoji { font-size:44px; flex-shrink:0; filter:drop-shadow(0 4px 4px rgba(0,0,0,.2)); }
+  .world .winfo { width:100%; color:#fff; }
+  .world .winfo b { display:block; font-family:'Fredoka',sans-serif; font-size:18px; font-weight:700; text-shadow:0 2px 3px rgba(0,0,0,.28); }
+  .world .winfo small { display:block; font-size:12px; font-weight:800; opacity:.95; margin-top:2px; }
+  .world .wstars { font-size:11.5px; background:rgba(0,0,0,.34); color:#fff; padding:4px 12px; border-radius:99px; font-weight:900; }
+  @media (min-width:760px){ .map { grid-template-columns:repeat(3,1fr); } }
+  @media (min-width:1020px){ .map { grid-template-columns:repeat(4,1fr); } #app { max-width:1140px; } }
+  @media (max-width:379px){ .map { grid-template-columns:1fr; } }
+
+  /* ===== MATES MERGE 3D (estilo 2248 del video) ===== */
+  .mm-hud { display:flex; justify-content:space-between; align-items:center; max-width:430px; margin:0 auto 8px; }
+  .mm-pill { background:#172246; border:2px solid #2e4382; color:#fff; font-family:'Fredoka',sans-serif; font-weight:700; padding:6px 14px; border-radius:50px; font-size:13.5px; box-shadow:0 3px 0 #060a17; white-space:nowrap; display:flex; align-items:center; gap:5px; }
+  .mm-score { font-family:'Fredoka','Segoe UI',sans-serif; font-size:32px; font-weight:700; color:#fff; text-shadow:0 3px 0 rgba(0,0,0,.5); line-height:1; }
+  .mm-score.bump { animation:mmbump .3s; }
+  @keyframes mmbump { 0%{transform:scale(1)} 50%{transform:scale(1.3)} 100%{transform:scale(1)} }
+  .mm-goalbar { position:relative; display:flex; align-items:center; justify-content:space-between; background:#131c3b; border:2px solid #25386b; border-radius:18px; padding:10px 16px; max-width:430px; margin:0 auto 12px; }
+  .mm-goalline { position:absolute; left:52px; right:52px; height:5px; background:linear-gradient(90deg,#fbbf24,#f43f5e); border-radius:4px; z-index:0; }
+  .mm-minitile { width:46px; height:46px; border-radius:12px; display:flex; align-items:center; justify-content:center; font-family:'Fredoka','Segoe UI',sans-serif; font-size:17px; font-weight:700; color:#fff; box-shadow:0 4px 0 rgba(0,0,0,.4); position:relative; z-index:1; background:#334155; transition:transform .15s, background .15s; }
+  .mm-minitile.center { width:56px; height:56px; font-size:20px; border:3px solid #ff85a1; transform:scale(1.06); }
+  .mm-minitile.center::before { content:"👑"; position:absolute; top:-11px; font-size:12px; }
+  .mm-minitile small { position:absolute; top:-15px; font-size:9px; font-weight:900; color:#94a3b8; letter-spacing:.5px; }
+  #mm-board { position:relative; background:#070b19; padding:12px; border-radius:24px; border:3px solid #25386b; box-shadow:0 10px 0 #050814, 0 15px 30px rgba(0,0,0,.35); max-width:430px; margin:0 auto; user-select:none; -webkit-user-select:none; touch-action:none; }
+  #mm-svg { position:absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:3; }
+  .mm-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:8px; position:relative; }
+  .mmtile { position:relative; z-index:2; aspect-ratio:1; display:flex; align-items:center; justify-content:center; border-radius:13px; font-family:'Fredoka','Segoe UI',sans-serif; font-size:20px; font-weight:700; color:#fff; box-shadow:0 5px 0 rgba(0,0,0,.38); transition:transform .16s cubic-bezier(.34,1.56,.64,1), filter .16s; cursor:pointer; }
+  .mmtile .mmtxt { position:relative; z-index:6; text-shadow:0 2px 3px rgba(0,0,0,.35); pointer-events:none; }
+  .mmtile.king { border:2px solid #ff85a1; }
+  .mmtile.king::before { content:"👑"; position:absolute; top:-7px; right:2px; font-size:13px; z-index:7; filter:drop-shadow(0 2px 2px rgba(0,0,0,.5)); }
+  .mmtile.pop-anim { animation:popMerge .34s cubic-bezier(.34,1.56,.64,1); }
+  .mmtile.drop-anim { animation:dropTile .26s cubic-bezier(.22,1,.36,1); }
+  @keyframes popMerge { 0%{transform:scale(.35)} 65%{transform:scale(1.22)} 100%{transform:scale(1)} }
+  @keyframes dropTile { 0%{transform:translateY(-42px); opacity:.65} 100%{transform:translateY(0); opacity:1} }
+  . val2, .mmtile.val2, .mm-minitile.val2{background:#27ae60;box-shadow:0 5px 0 #1e8449}
+  .mmtile.val4, .mm-minitile.val4{background:#2980b9;box-shadow:0 5px 0 #1f618d}
+  .mmtile.val8, .mm-minitile.val8{background:#d35400;box-shadow:0 5px 0 #a04000}
+  .mmtile.val16, .mm-minitile.val16{background:#c2185b;box-shadow:0 5px 0 #880e4f}
+  .mmtile.val32, .mm-minitile.val32{background:#7b1fa2;box-shadow:0 5px 0 #4a148c}
+  .mmtile.val64, .mm-minitile.val64{background:#7f1d1d;box-shadow:0 5px 0 #450a0a}
+  .mmtile.val128, .mm-minitile.val128{background:#512da8;box-shadow:0 5px 0 #311b92}
+  .mmtile.val256, .mm-minitile.val256{background:#1f618d;box-shadow:0 5px 0 #154360}
+  .mmtile.val512, .mm-minitile.val512{background:#0e7490;box-shadow:0 5px 0 #164e63}
+  .mmtile.val1024, .mm-minitile.val1024{background:#b45309;box-shadow:0 5px 0 #78350f}
+  .mmtile.val2048, .mm-minitile.val2048{background:#be123c;box-shadow:0 5px 0 #831843}
+  .mmtile.val4096, .mm-minitile.val4096{background:#9d174d;box-shadow:0 5px 0 #581c87}
+  .mmtile.val8192, .mm-minitile.val8192{background:#4338ca;box-shadow:0 5px 0 #312e81}
+  .mmtile.sel { transform:scale(1.07); box-shadow:0 0 0 3.5px #fff, 0 6px 14px rgba(0,0,0,.5); filter:brightness(1.12); z-index:5; }
+  .mm-float { position:absolute; font-family:'Fredoka','Segoe UI',sans-serif; font-size:24px; font-weight:700; color:#fff; text-shadow:0 3px 6px rgba(0,0,0,.6); pointer-events:none; z-index:20; animation:mmfloatup .75s ease-out forwards; }
+  @keyframes mmfloatup { 0%{transform:translate(-50%,0) scale(.8); opacity:1} 100%{transform:translate(-50%,-45px) scale(1.15); opacity:0} }
+  .mm-excellent { position:absolute; top:42%; left:50%; transform:translate(-50%,-50%); background:linear-gradient(90deg,#00c6ff,#0072ff); border:3px solid #fff; padding:8px 22px; border-radius:20px; font-family:'Fredoka',sans-serif; font-size:22px; color:#fff; z-index:30; pointer-events:none; box-shadow:0 10px 25px rgba(0,0,0,.55); text-align:center; animation:mmExcPop 1.05s ease forwards; }
+  @keyframes mmExcPop { 0%{transform:translate(-50%,-50%) scale(.3);opacity:0} 25%{transform:translate(-50%,-50%) scale(1.12);opacity:1} 80%{transform:translate(-50%,-50%) scale(1);opacity:1} 100%{transform:translate(-50%,-70%) scale(.85);opacity:0} }
+  .mm-part { position:absolute; width:10px; height:10px; border-radius:3px; pointer-events:none; z-index:19; animation:mmpart .65s ease-out forwards; }
+  @keyframes mmpart { 0%{transform:translate(0,0) scale(1); opacity:1} 100%{transform:translate(var(--dx,0px), var(--dy,-60px)) scale(.2); opacity:0} }
+  .mm-powers { display:flex; gap:10px; max-width:430px; margin:12px auto 0; }
+  .mm-power { flex:1; background:#172246; border:2px solid #2e4382; border-bottom-width:5px; color:#fff; font-family:'Fredoka',sans-serif; font-weight:700; font-size:13px; padding:10px 6px; border-radius:16px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; transition:transform .1s, background .15s; }
+  .mm-power small { font-family:'Nunito',sans-serif; font-size:10px; color:#94a3b8; font-weight:800; }
+  .mm-power:active { transform:translateY(3px); }
+  .mm-power.active-mode { background:#e03131; border-color:#ff8787; }
+  .lvlbar { height:9px; background:rgba(0,0,0,.28); border-radius:99px; margin-top:6px; overflow:hidden; }
+  .lvlbar i { display:block; height:100%; background:#fde047; border-radius:99px; }
+
+  .bigbtn { border:none; border-radius:20px; padding:14px; font-family:'Fredoka',sans-serif; font-size:16px; font-weight:700; cursor:pointer; box-shadow:0 5px 0 rgba(0,0,0,.22); transition:transform .1s, box-shadow .1s; color:#fff; }
+  .bigbtn:active { transform:translateY(4px); box-shadow:0 1px 0 rgba(0,0,0,.22); }
+  .gridbtns { display:grid; gap:10px; }
+  .chip { border:3px solid #e2e8f0; border-bottom-width:5px; background:rgba(255,255,255,.9); border-radius:18px; padding:12px 8px; font-weight:900; font-size:13px; text-align:center; cursor:pointer; transition:transform .1s; display:flex; flex-direction:column; align-items:center; gap:6px; color:#1e293b; }
+  .chip:active { transform:scale(.95); }
+  .chip.sel { background:#fbbf24; border-color:#d97706; }
+  .chip .big { font-size:38px; line-height:1; }
+  .chip.newone { border-style:dashed; border-color:#22c55e; background:#f0fdf4; }
+
+  .phrasebar { background:#fffbeb; border:3px dashed #f59e0b; border-radius:18px; padding:12px; min-height:60px; display:flex; flex-wrap:wrap; gap:6px; align-items:center; justify-content:center; }
+  .token { background:#f59e0b; color:#fff; font-weight:900; padding:6px 12px; border-radius:99px; font-size:15px; animation:pop .25s; cursor:pointer; }
+  .token.con { background:#f97316; } .token.cony { background:#8b5cf6; }
+  .token .x { opacity:.7; font-size:11px; margin-left:3px; }
+  .token.empty { background:#e2e8f0; color:#94a3b8; cursor:default; }
+
+  .scene { background:linear-gradient(180deg,#fce7f3,#e9d5ff); border-radius:20px; padding:24px 10px; text-align:center; font-size:56px; line-height:1.15; margin-bottom:12px; min-height:140px; display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:4px; }
+  .storytext { font-size:21px; font-weight:900; text-align:center; line-height:1.45; padding:0 6px; }
+  .storynav { display:flex; gap:10px; justify-content:center; margin-top:14px; flex-wrap:wrap; }
+  .qopt { width:100%; border:3px solid #e9d5ff; border-bottom-width:5px; background:#fae8ff; border-radius:16px; padding:13px; font-size:17px; font-weight:900; cursor:pointer; color:#6b21a8; }
+  .qopt:active { transform:translateY(2px); }
+
+  .feedback { text-align:center; font-size:20px; font-weight:900; padding:10px; animation:pop .3s; }
+  .ok { color:#16a34a; } .bad { color:#e11d48; }
+  .toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:300; background:#1e293b; color:#fff; font-weight:900; padding:12px 22px; border-radius:99px; font-size:15px; box-shadow:0 8px 24px rgba(0,0,0,.3); animation:pop .3s; max-width:90vw; text-align:center; }
+  .confetti { position:fixed; top:-40px; z-index:250; font-size:26px; pointer-events:none; animation:fall 2.2s linear forwards; }
+
+  .navrow { position:fixed; top:12px; left:12px; z-index:100; display:flex; gap:8px; }
+  .navrow button { width:46px; height:46px; border:none; border-radius:50%; background:rgba(255,255,255,.95); font-size:22px; cursor:pointer; box-shadow:0 4px 0 rgba(0,0,0,.18); }
+  .navrow button:active { transform:translateY(2px); }
+  .dadbtn { display:block; margin:0 auto 20px; border:none; border-radius:99px; padding:13px 30px; background:#334155; color:#fff; font-family:'Fredoka',sans-serif; font-weight:700; font-size:15px; cursor:pointer; box-shadow:0 5px 0 #1e293b; }
+
+  .statgrid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:12px; }
+  .stat { background:linear-gradient(180deg,#eff6ff,#dbeafe); border-radius:16px; padding:10px 4px; text-align:center; }
+  .stat b { font-size:22px; display:block; color:#1d4ed8; }
+  .stat small { font-size:10px; font-weight:800; color:#475569; }
+  .weekbar { margin:8px 0; }
+  .weekbar .wlabel { display:flex; justify-content:space-between; font-size:12px; font-weight:900; margin-bottom:3px; }
+  .weekbar .wtrack { height:12px; background:#e2e8f0; border-radius:99px; overflow:hidden; }
+  .weekbar .wfill { height:100%; border-radius:99px; animation:progress .8s ease-out; }
+  table.stats { width:100%; border-collapse:collapse; font-size:13px; margin:10px 0; }
+  table.stats th { text-align:left; color:#64748b; font-size:11px; border-bottom:2px solid #e2e8f0; padding:4px 2px; }
+  table.stats td { font-weight:800; padding:5px 2px; border-bottom:1px solid #f1f5f9; }
+  .tipbox { background:#e0f2fe; border-left:5px solid #0284c7; border-radius:10px; padding:10px 12px; font-size:13px; font-weight:700; color:#0c4a6e; margin:8px 0; }
+  .warnbox { background:#fef2f2; border-left:5px solid #dc2626; border-radius:10px; padding:10px 12px; font-size:13px; font-weight:700; color:#7f1d1d; margin:8px 0; }
+  .inputrow input, .inputrow textarea { width:100%; border:2px solid #cbd5e1; border-radius:12px; padding:11px; font-size:15px; font-weight:700; font-family:inherit; }
+  .agebtns { display:flex; gap:6px; flex-wrap:wrap; margin-top:6px; }
+  .agebtns button { border:3px solid #e2e8f0; background:#fff; border-radius:99px; padding:8px 14px; font-weight:900; cursor:pointer; }
+  .agebtns button.sel { background:#0ea5e9; border-color:#0284c7; color:#fff; }
+
+  .unlockrow { display:flex; align-items:center; gap:10px; padding:8px 4px; font-weight:800; font-size:14px; }
+  .unlockrow.locked2 { opacity:.45; }
+  .unlockrow.won { cursor:pointer; border-radius:12px; }
+  .unlockrow.won:active { background:#f1f5f9; }
+
+  /* Modal premios / dragón / confirmación adulto */
+  .modalbg { position:fixed; inset:0; background:rgba(15,23,42,.75); z-index:400; display:flex; align-items:center; justify-content:center; animation:pop .25s; padding:16px; }
+  .modalbox { background:#fff; border-radius:28px; padding:28px 20px; text-align:center; max-width:88vw; width:360px; animation:zoombg .4s cubic-bezier(.2,.8,.3,1.4); box-shadow:0 20px 60px rgba(0,0,0,.4); border:4px solid #fbbf24; }
+  .modalbox .bigemoji { font-size:80px; line-height:1; }
+  .modalbox h3 { font-family:'Fredoka',sans-serif; font-size:22px; font-weight:700; color:#312e81; margin-top:10px; }
+  .modalbox p { font-weight:800; color:#64748b; margin-top:4px; font-size:14px; }
+
+  .tabbtns { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+  .tabbtns button { border:3px solid #e2e8f0; border-bottom-width:5px; background:#fff; border-radius:99px; padding:8px 14px; font-weight:900; font-size:13px; cursor:pointer; color:#334155; }
+  .tabbtns button.sel { background:#0ea5e9; border-color:#0284c7; color:#fff; }
+  .calcgrid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px; }
+  .calcgrid button { border:none; border-radius:16px; padding:16px 0; font-size:20px; font-weight:900; cursor:pointer; background:#eef2ff; color:#3730a3; box-shadow:0 4px 0 #c7d2fe; }
+  .calcgrid button:active { transform:translateY(2px); box-shadow:none; }
+  .calcgrid button.op { background:#fde68a; color:#92400e; box-shadow:0 4px 0 #f59e0b; }
+  .calcgrid button.eq { background:#22c55e; color:#fff; box-shadow:0 4px 0 #15803d; }
+  .calcdisp { background:#1e293b; color:#7dd3fc; border-radius:16px; padding:16px; font-size:30px; font-weight:900; text-align:right; font-family:'Consolas',monospace; min-height:64px; word-break:break-all; }
+  .mathprob { font-size:34px; font-weight:900; text-align:center; padding:16px; background:linear-gradient(180deg,#eff6ff,#dbeafe); border-radius:18px; margin:10px 0; color:#1e3a8a; }
+  .engword { cursor:pointer; }
+  .engword .en { font-weight:900; color:#0e7490; }
+  .engword .es { font-size:11px; color:#64748b; }
+</style>
+</head>
+<body>
+<div class="bg-cloud c1"></div>
+<div class="bg-cloud c2"></div>
+<div id="app"></div>
+<div id="navbox"></div>
+<div id="dragonfab"></div>
+<script>
+/* =========================================================
+   GO DARIUS PRO — App de lenguaje y aprendizaje gamificada
+   Un archivo HTML. Sin backend. Datos en localStorage.
+   ========================================================= */
+
+// ---------- ESTADO BLINDADO ----------
+const DEFAULT_STATE = {
+  name: "Darius", age: 4, gender: "nino", stars: 0, totalStars: 0, theme: "",
+  worlds: { siento:{ok:0,err:0,clicks:0}, necesito:{ok:0,err:0,clicks:0}, dia:{ok:0,err:0,clicks:0},
+            cuentos:{ok:0,err:0,clicks:0}, puente:{ok:0,err:0,clicks:0}, crear:{ok:0,err:0,clicks:0},
+            mate:{ok:0,err:0,clicks:0}, english:{ok:0,err:0,clicks:0}, dibujar:{ok:0,err:0,clicks:0}, juegos:{ok:0,err:0,clicks:0} },
+  today: { date:"", minutes:0, ok:0, err:0, emotions:0, missions:[], missionSet:[], gift:false },
+  history: [], phrases: [], customDia: [], customMotivos: []
+};
+let S = loadState();
+function loadState(){
+  const def = JSON.parse(JSON.stringify(DEFAULT_STATE));
+  try {
+    const raw = localStorage.getItem("gdpro2");
+    if(raw){
+      const p = JSON.parse(raw);
+      const merged = Object.assign({}, def, p);
+      merged.worlds = Object.assign({}, def.worlds, p.worlds || {});
+      Object.keys(def.worlds).forEach(k=>{
+        merged.worlds[k] = Object.assign({ok:0,err:0,clicks:0}, merged.worlds[k] || {});
+      });
+      merged.today = Object.assign({}, def.today, p.today || {});
+      if(!Array.isArray(merged.today.missions)) merged.today.missions = [];
+      if(!Array.isArray(merged.history)) merged.history = [];
+      if(!Array.isArray(merged.customDia)) merged.customDia = [];
+      if(!Array.isArray(merged.customMotivos)) merged.customMotivos = [];
+      return merged;
+    }
+  } catch(e){}
+  return def;
+}
+function save(){ try { localStorage.setItem("gdpro2", JSON.stringify(S)); } catch(e){} }
+function todayISO(){ return new Date().toISOString().slice(0,10); }
+function esNina(){ return S.gender === "nina"; }
+function gChamp(){ return esNina() ? "campeona" : "campeón"; }
+function gHeroe(){ return esNina() ? "heroína" : "héroe"; }
+function setGenero(g){ S.gender = g; save(); applyTheme(); go("dad", {back:true}); }
+function ensureToday(){ if(S.today.date !== todayISO()){ S.today = { date:todayISO(), minutes:0, ok:0, err:0, emotions:0, missions:[], missionSet:[], gift:false }; save(); } }
+setInterval(()=>{ ensureToday(); if(document.visibilityState==="visible"){ S.today.minutes += 0.5; save(); } }, 30000);
+
+// ---------- VOZ ----------
+function speak(text, lang, cb){
+  try {
+    if(!("speechSynthesis" in window)){ if(cb) cb(); return; }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang || "es-ES"; u.rate = 0.92; u.pitch = 1.1;
+    if(cb) u.onend = cb;
+    window.speechSynthesis.speak(u);
+  } catch(e){ if(cb) cb(); }
+}
+
+// ---------- SONIDOS ----------
+const AC = window.AudioContext || window.webkitAudioContext;
+let actx = null;
+function tone(freq, dur, delay, type, vol){
+  try{
+    if(!AC) return;
+    if(!actx) actx = new AC();
+    if(actx.state === "suspended") actx.resume();
+    const t = actx.currentTime + (delay||0);
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = type||"sine"; o.frequency.value = freq;
+    g.gain.setValueAtTime(vol||0.15, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t+dur);
+    o.connect(g); g.connect(actx.destination);
+    o.start(t); o.stop(t+dur);
+  }catch(e){}
+}
+const sfx = {
+  ok(){ [523,659,784].forEach((f,i)=>tone(f,.25,i*.09,"triangle",.18)); },
+  star(){ [880,1174].forEach((f,i)=>tone(f,.3,i*.12,"sine",.15)); },
+  bad(){ tone(220,.3,0,"sine",.12); },
+  tap(){ tone(660,.08,0,"sine",.07); },
+  unlock(){ [523,659,784,1046].forEach((f,i)=>tone(f,.35,i*.11,"triangle",.2)); }
+};
+function buzz(ms){ try{ navigator.vibrate && navigator.vibrate(ms); }catch(e){} }
+
+function confetti(){
+  const ems = ["⭐","🎉","✨","🌟","🎊","💛"];
+  for(let i=0;i<36;i++){
+    const d = document.createElement("div");
+    d.className = "confetti";
+    d.textContent = ems[Math.floor(Math.random()*ems.length)];
+    d.style.left = (Math.random()*100)+"vw";
+    d.style.animationDelay = (Math.random()*0.5)+"s";
+    d.style.fontSize = (18+Math.random()*20)+"px";
+    document.body.appendChild(d);
+    setTimeout(()=>d.remove(), 2800);
+  }
+}
+function toast(msg){
+  const t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(()=>t.remove(), 2400);
+}
+
+// ---------- CONFIRMACIÓN PARA ADULTOS (CANDADO PARENTAL) ----------
+let adultTargetAction = null, adultExpected = 0;
+function askAdultConfirmation(actionFn, subtitle){
+  sfx.tap();
+  const a = 6 + Math.floor(Math.random()*4);
+  const b = 7 + Math.floor(Math.random()*3);
+  adultExpected = a * b;
+  adultTargetAction = actionFn;
+  const bg = document.createElement("div");
+  bg.className = "modalbg";
+  bg.id = "adult-gate-modal";
+  bg.innerHTML = '<div class="modalbox">' +
+    '<p style="font-weight:900;color:#0284c7;letter-spacing:1px">🔒 CONFIRMACIÓN PARA ADULTOS</p>' +
+    '<h3>¿Cuánto es ' + a + ' × ' + b + '?</h3>' +
+    '<p>' + (subtitle || "Resuelve esta cuenta para entrar al panel de adultos.") + '</p>' +
+    '<div class="inputrow" style="margin:14px 0"><input id="adult-gate-inp" type="number" inputmode="numeric" placeholder="Respuesta" style="text-align:center;font-size:22px"></div>' +
+    '<div style="display:flex;gap:8px">' +
+      '<button class="bigbtn" style="flex:1;background:#94a3b8" onclick="closeAdultGate()">Cancelar</button>' +
+      '<button class="bigbtn" style="flex:1;background:#22c55e" onclick="checkAdultGate()">Entrar</button>' +
+    '</div></div>';
+  document.body.appendChild(bg);
+  setTimeout(()=>{ const inp = document.getElementById("adult-gate-inp"); if(inp) inp.focus(); }, 80);
+}
+function closeAdultGate(){
+  const m = document.getElementById("adult-gate-modal");
+  if(m) m.remove();
+}
+function checkAdultGate(){
+  const inp = document.getElementById("adult-gate-inp");
+  const val = inp ? parseInt(inp.value, 10) : NaN;
+  if(val === adultExpected){
+    closeAdultGate();
+    sfx.ok();
+    if(adultTargetAction) adultTargetAction();
+  } else {
+    sfx.bad(); buzz(100);
+    toast("🔒 Respuesta incorrecta. Zona para adultos.");
+  }
+}
+
+// ---------- PREMIOS / DESBLOQUEOS ----------
+const UNLOCKS = [
+  { at:5,   id:"d1",  emoji:"🐲", label:"¡Dragón rojo amigo!", tipo:"dragon" },
+  { at:8,   id:"dog", emoji:"🐶", label:"¡Perrito mascota!", tipo:"amigo" },
+  { at:10,  id:"hat", emoji:"👑", label:"¡Corona para Darius!", tipo:"item" },
+  { at:12,  id:"d2",  emoji:"🦕", label:"¡Dragón verde amigo!", tipo:"dragon" },
+  { at:15,  id:"magohat", emoji:"🎩", label:"¡Sombrero de mago!", tipo:"item" },
+  { at:18,  id:"cat", emoji:"🐱", label:"¡Gatito mascota!", tipo:"amigo" },
+  { at:20,  id:"w-espacio", emoji:"🚀", label:"¡Mundo Astronauta!", tipo:"mundo", theme:"t-space" },
+  { at:22,  id:"d3",  emoji:"🦖", label:"¡Dragón morado amigo!", tipo:"dragon" },
+  { at:25,  id:"robot", emoji:"🤖", label:"¡Robot amigo!", tipo:"amigo" },
+  { at:30,  id:"w-bruja", emoji:"🧙", label:"¡Mundo de la Bruja!", tipo:"mundo", theme:"t-bruja" },
+  { at:32,  id:"fones", emoji:"🎧", label:"¡Audífonos cool!", tipo:"item" },
+  { at:35,  id:"uni", emoji:"🦄", label:"¡Unicornio amigo!", tipo:"amigo" },
+  { at:40,  id:"w-escuela", emoji:"🏫", label:"¡Mundo Escuela!", tipo:"mundo", theme:"t-escuela" },
+  { at:45,  id:"guitar", emoji:"🎸", label:"¡Guitarra de roca!", tipo:"item" },
+  { at:50,  id:"w-neon", emoji:"🌃", label:"¡Mundo Neon del Robot!", tipo:"mundo", theme:"t-neon" },
+  { at:55,  id:"dolph", emoji:"🐬", label:"¡Delfín amigo!", tipo:"amigo" },
+  { at:60,  id:"w-futbol", emoji:"⚽", label:"¡Mundo Fútbol!", tipo:"mundo", theme:"t-futbol" },
+  { at:65,  id:"d4",  emoji:"🐉", label:"¡Dragón dorado amigo!", tipo:"dragon" },
+  { at:70,  id:"glasses", emoji:"🕶️", label:"¡Gafas de sol!", tipo:"item" },
+  { at:80,  id:"w-mar", emoji:"🌊", label:"¡Mundo del Mar!", tipo:"mundo", theme:"t-mar" },
+  { at:90,  id:"penguin", emoji:"🐧", label:"¡Pingüino amigo!", tipo:"amigo" },
+  { at:100, id:"w-estrellas", emoji:"🌟", label:"¡Mundo de las Estrellas!", tipo:"mundo", theme:"t-estrellas" },
+  { at:120, id:"wand", emoji:"🪄", label:"¡Varita mágica!", tipo:"item" },
+  { at:150, id:"eleph", emoji:"🐘", label:"¡Elefantito amigo!", tipo:"amigo" },
+  { at:200, id:"story", emoji:"🗝️", label:"¡Historia secreta del dragón!", tipo:"cuento" }
+];
+function dragonsCollection(){
+  const base = ["🐉"];
+  UNLOCKS.forEach(u=>{ if((u.tipo==="dragon"||u.tipo==="amigo") && S.totalStars>=u.at) base.push(u.emoji); });
+  return base;
+}
+function addStar(n){
+  const antes = S.totalStars;
+  S.stars += n; S.totalStars += n; save();
+  const box = document.getElementById("starcount");
+  if(box){ box.textContent = S.stars; const p = box.parentElement; p.classList.remove("fly"); void p.offsetWidth; p.classList.add("fly"); }
+  UNLOCKS.forEach(u=>{ if(antes < u.at && S.totalStars >= u.at){ showPrize(u); } });
+}
+function worldLevel(wid){ const ok = (S.worlds[wid]||{ok:0}).ok; return Math.min(4, 1 + Math.floor(ok/4)); }
+
+function showPrize(u){
+  sfx.unlock(); confetti(); buzz(200);
+  const bg = document.createElement("div");
+  bg.className = "modalbg";
+  bg.innerHTML = '<div class="modalbox">' +
+    '<p style="font-weight:900;color:#d946ef;letter-spacing:1px">🎁 ¡NUEVO PREMIO! 🎁</p>' +
+    '<div class="bigemoji jump" style="margin-top:10px">' + u.emoji + '</div>' +
+    '<h3>' + u.label + '</h3>' +
+    (u.tipo==="mundo" ? '<p>Toca el premio en "Mis premios" para cambiar de mundo.</p>' : '') +
+    '<button class="bigbtn" style="background:#22c55e;width:100%;margin-top:16px" onclick="closePrize()">🎉 ¡Genial!</button></div>';
+  document.body.appendChild(bg);
+  speak(u.label.replace(/[¡!🎁]/g,""));
+}
+function closePrize(){
+  const m = document.querySelector(".modalbg");
+  if(m) m.remove();
+  if(navStack[navStack.length-1] && navStack[navStack.length-1].screen==="home") go("home");
+}
+function usePrize(u){
+  const m=document.querySelector(".modalbg"); if(m) m.remove();
+  S.theme = u.theme || ""; save(); applyTheme();
+  toast(u.emoji + " ¡Bienvenido al nuevo mundo!");
+  speak("Bienvenido a tu nuevo mundo");
+  go("home");
+}
+function showPrizeModal(u){
+  sfx.unlock();
+  const bg = document.createElement("div");
+  bg.className = "modalbg";
+  let extra = "";
+  if(u.tipo==="mundo") extra = '<button class="bigbtn" style="background:#8b5cf6;width:100%;margin-top:12px" onclick="usePrize(UNLOCKS[' + UNLOCKS.indexOf(u) + '])">🚀 ¡Viajar a este mundo!</button>';
+  if(u.tipo==="cuento") extra = '<button class="bigbtn" style="background:#d946ef;width:100%;margin-top:12px" onclick="closePrize();go(\'world\',{param:\'cuentos\'})">📖 ¡Leer la historia!</button>';
+  bg.innerHTML = '<div class="modalbox">' +
+    '<p style="font-weight:900;color:#d946ef;letter-spacing:1px">🏆 TU PREMIO</p>' +
+    '<div class="bigemoji jump" style="margin-top:10px">' + u.emoji + '</div>' +
+    '<h3>' + u.label + '</h3>' +
+    '<p>' + prizeDesc(u) + '</p>' + extra +
+    '<button class="bigbtn" style="background:#22c55e;width:100%;margin-top:10px" onclick="closePrize()">👍 Seguir jugando</button></div>';
+  document.body.appendChild(bg);
+  speak(u.label.replace(/[¡!]/g,""));
+}
+function prizeDesc(u){
+  if(u.tipo==="dragon") return "Un nuevo dragón para tu colección. Saluda contigo con el botón 🐉";
+  if(u.tipo==="amigo") return "Un amigo nuevo que salta contigo con el botón 🐉";
+  if(u.tipo==="item") return "Un accesorio especial para tus aventuras";
+  if(u.tipo==="mundo") return "Cambia el escenario de toda la app";
+  return "Un premio muy especial";
+}
+function applyTheme(){ document.body.className = ((S.theme||"") + (esNina()?" girl":"")).trim(); }
+
+function renderDragonFab(){
+  const el = document.getElementById("dragonfab");
+  const cur = navStack[navStack.length-1];
+  if(!cur || cur.screen==="dad"){ el.innerHTML=""; return; }
+  el.innerHTML = '<button class="dragonbtn jump" onclick="randomDragon()" aria-label="Dragón sorpresa">🐉</button>';
+}
+function randomDragon(){
+  sfx.tap();
+  const col = dragonsCollection();
+  const d = col[Math.floor(Math.random()*col.length)];
+  const frases = [
+    "¡Hola campeón! ¿Jugamos juntos?",
+    "¡Estoy orgulloso de ti!",
+    "¡Tú sí que sabes hablar!",
+    "¡Las palabras son tu superpoder!",
+    "¡Vamos por más estrellas, campeón!",
+    "¡Eres increíble!",
+    "¡Cuéntame algo de tu día!",
+    "¡Yo creo en ti!",
+    "¡Cada día hablas mejor que ayer!",
+    "¡Eres más fuerte que un dragón!",
+    "¡Sigue así, vas súper bien!",
+    "¡Me encanta jugar contigo!",
+    "¡Tus ideas son geniales!",
+    "¡Hoy es un gran día para aprender!",
+    "¡Eres un campeón de las palabras!"
+  ];
+  let f = frases[Math.floor(Math.random()*frases.length)];
+  if(esNina()) f = f.replace(/campeón/g,"campeona").replace(/héroe/g,"heroína");
+  const bg = document.createElement("div");
+  bg.className = "modalbg";
+  bg.innerHTML = '<div class="modalbox" onclick="closeDragon()">' +
+    '<div class="bigemoji jump">' + d + '</div>' +
+    '<h3 style="margin-top:14px">' + f + '</h3>' +
+    '<p>Toca la pantalla para seguir jugando</p></div>';
+  document.body.appendChild(bg);
+  speak(f);
+}
+function closeDragon(){ const m=document.querySelector(".modalbg"); if(m) m.remove(); }
+
+// ---------- MISIONES ----------
+const MISSION_POOL = [
+  { id:"m-siento",  label:"Di cómo te sientes",  worlds:["siento"], e:"😊" },
+  { id:"m-frase",   label:"Arma una frase mágica", worlds:["necesito"], e:"🙏" },
+  { id:"m-dia",     label:"Cuenta tu día",       worlds:["dia"], e:"☀️" },
+  { id:"m-cuento",  label:"Lee un cuento",       worlds:["cuentos"], e:"📚" },
+  { id:"m-puente",  label:"3 palabras mágicas",  worlds:["puente"], e:"⭐" },
+  { id:"m-crear",   label:"Crea una historia",  worlds:["crear"], e:"✍️" },
+  { id:"m-mate",    label:"Resuelve cuentas",    worlds:["mate"], e:"🔢" },
+  { id:"m-eng",     label:"Aprende palabras en inglés", worlds:["english"], e:"🇬🇧" },
+  { id:"m-juegos",  label:"Gana un juego arcade",  worlds:["juegos"], e:"🎮" }
+];
+function todaysMissions(){
+  ensureToday();
+  if(!S.today.missionSet || !S.today.missionSet.length){
+    S.today.missionSet = MISSION_POOL.slice().sort(()=>Math.random()-0.5).slice(0,3).map(m=>m.id);
+    save();
+  }
+  return MISSION_POOL.filter(m=>S.today.missionSet.indexOf(m.id)>=0);
+}
+function completeMission(worldId){
+  ensureToday();
+  todaysMissions().forEach(m=>{
+    if(m.worlds.includes(worldId) && !S.today.missions.includes(m.id)){
+      S.today.missions.push(m.id);
+      const all = todaysMissions().every(m2=>S.today.missions.includes(m2.id));
+      if(all){
+        addStar(2); confetti(); sfx.unlock();
+        S.today.missions = [];
+        S.today.missionSet = [];
+        toast("🎁 ¡Misiones completadas! +2 ⭐ · ¡Ya tienes NUEVAS misiones!");
+      } else {
+        toast("✅ ¡Misión avanzada!");
+      }
+      save();
+    }
+  });
+}
+function regClick(wid){ if(S.worlds[wid]) S.worlds[wid].clicks++; save(); }
+function regOk(wid, label){
+  if(S.worlds[wid]) S.worlds[wid].ok++;
+  S.today.ok++;
+  if(wid==="siento") S.today.emotions++;
+  S.history.push({ t: label, w: wid, d: todayISO(), ts: Date.now() });
+  if(S.history.length>200) S.history = S.history.slice(-200);
+  addStar(1); sfx.ok(); buzz(60); confetti(); completeMission(wid); save();
+}
+function regErr(wid){ if(S.worlds[wid]) S.worlds[wid].err++; S.today.err++; save(); }
+
+// ---------- NAVEGACIÓN ----------
+let navStack = [];
+function go(screen, opts){
+  opts = opts || {};
+  navStack.push({ screen, opts });
+  const app = document.getElementById("app");
+  app.innerHTML = '<div class="' + (opts.back?'screen-anim back':'screen-anim') + '">' + SCREENS[screen](opts) + '</div>';
+  window.scrollTo(0,0);
+  if(screen==="world") setTimeout(()=>mountWorld(opts.param), 0);
+  renderNav(); renderDragonFab();
+}
+function goBack(){ navStack.pop(); const prev = navStack.pop(); go(prev ? prev.screen : "home", { back:true, param: prev ? prev.opts.param : undefined }); }
+function renderNav(){
+  const nb = document.getElementById("navbox");
+  const cur = navStack[navStack.length-1];
+  if(!cur || cur.screen==="home" || cur.screen==="dad"){ nb.innerHTML=""; return; }
+  nb.innerHTML = '<div class="navrow">' +
+    '<button onclick="goBack()" aria-label="Atrás">⬅️</button>' +
+    '<button onclick="go(\'home\')" aria-label="Inicio">🏠</button></div>';
+}
+
+// ---------- DATOS ----------
+const WORLDS = [
+  { id:"siento",    name:"Emociones",        emoji:"😊", color:"linear-gradient(180deg,#ff922b,#f76707)", desc:"Di lo que sientes" },
+  { id:"necesito",  name:"Frases Mágicas",  emoji:"🙏", color:"linear-gradient(180deg,#20c997,#0ca678)", desc:"Construye lo que necesitas" },
+  { id:"dia",       name:"Mi Día",          emoji:"☀️", color:"linear-gradient(180deg,#ff6b6b,#f03e3e)", desc:"Cuenta tu día como una historia" },
+  { id:"cuentos",   name:"Historias",       emoji:"📚", color:"linear-gradient(180deg,#f06595,#d6336c)", desc:"Lee y comprende" },
+  { id:"puente",    name:"Palabras Mágicas",emoji:"⭐", color:"linear-gradient(180deg,#845ef7,#7048e8)", desc:"Une ideas con conectores" },
+  { id:"mate",      name:"Matemáticas",     emoji:"🔢", color:"linear-gradient(180deg,#339af0,#1c7ed6)", desc:"Suma, resta, multiplica y calcula" },
+  { id:"english",   name:"Inglés",          emoji:"🇬🇧", color:"linear-gradient(180deg,#ef4444,#b91c1c)", desc:"Palabras y frases en inglés" },
+  { id:"crear",     name:"Crear Historias", emoji:"✍️", color:"linear-gradient(180deg,#14b8a6,#0d9488)", desc:"Inventa y escucha tu cuento" },
+  { id:"dibujar",   name:"Pizarra Mágica", emoji:"🎨", color:"linear-gradient(180deg,#a855f7,#6366f1)", desc:"Dibuja con el dedo y suelta tu imaginación" },
+  { id:"juegos",    name:"Juegos Arcade", emoji:"🎮", color:"linear-gradient(180deg,#f43f5e,#be123c)", desc:"Merge, atrapa, memoriza y suma jugando" }
+];
+
+const EMOCIONES = [
+  { emoji:"😀", n:"feliz", c:"#fde047" }, { emoji:"😢", n:"triste", c:"#7dd3fc" },
+  { emoji:"😠", n:"enojado", c:"#fca5a5" }, { emoji:"😮", n:"sorprendido", c:"#d8b4fe" },
+  { emoji:"😨", n:"asustado", c:"#a5b4fc" }, { emoji:"🥱", n:"cansado", c:"#fdba74" },
+  { emoji:"🤗", n:"querido", c:"#f9a8d4" }, { emoji:"🤒", n:"enfermo", c:"#bef264" },
+  { emoji:"😳", n:"avergonzado", c:"#fecdd3" }, { emoji:"😤", n:"frustrado", c:"#fdba74" },
+  { emoji:"🤩", n:"emocionado", c:"#fde68a" }, { emoji:"😔", n:"desanimado", c:"#c7d2fe" }
+];
+const NIVELES = [ {t:"un poco", e:"🙂"}, {t:"normal", e:"😐"}, {t:"muy", e:"🤯"} ];
+const MOTIVOS = [
+  { emoji:"🎮", t:"porque quiero jugar" }, { emoji:"🧸", t:"porque perdí mi juguete" },
+  { emoji:"🍫", t:"porque me dieron dulces" }, { emoji:"👥", t:"porque jugué con amigos" },
+  { emoji:"🏫", t:"porque fue el colegio" }, { emoji:"🐶", t:"porque vi un perro" },
+  { emoji:"😭", t:"porque me pegaron" }, { emoji:"🏅", t:"porque gané algo" },
+  { emoji:"🌧️", t:"porque está lloviendo" }, { emoji:"🎁", t:"porque me dieron un regalo" },
+  { emoji:"😡", t:"porque me quitaron algo" }, { emoji:"🍝", t:"porque comí rico" },
+  { emoji:"💤", t:"porque dormí poquito" }, { emoji:"🎬", t:"porque vi una peli chévere" },
+  { emoji:"🤢", t:"porque me siento mal" }, { emoji:"🏆", t:"porque mi equipo ganó" },
+  { emoji:"💔", t:"porque mi amigo no jugó conmigo" }, { emoji:"🎂", t:"porque es mi cumpleaños" }
+];
+function motivosAll(){ return MOTIVOS.concat((S.customMotivos||[]).map(t=>({ emoji:"⭐", t:t, custom:true }))); }
+
+const AAC_INTENTOS = [
+  { id:"quiero",  texto:"Yo quiero",  color:"#fbbf24", items:[
+    { e:"🍎", t:"comer" }, { e:"💧", t:"tomar agua" }, { e:"🎮", t:"jugar" }, { e:"🫂", t:"un abrazo" },
+    { e:"📖", t:"un cuento" }, { e:"🧸", t:"mi juguete" }, { e:"🎨", t:"dibujar" }, { e:"🏃", t:"correr" } ] },
+  { id:"tengo",   texto:"Yo tengo",   color:"#34d399", items:[
+    { e:"🍽️", t:"hambre" }, { e:"🥤", t:"sed" }, { e:"😴", t:"sueño" }, { e:"🥶", t:"frío" },
+    { e:"🥵", t:"calor" }, { e:"😱", t:"miedo" }, { e:"🤕", t:"dolor" }, { e:"💪", t:"energía" } ] },
+  { id:"necesito",texto:"Yo necesito",color:"#38bdf8", items:[
+    { e:"🚽", t:"ir al baño" }, { e:"❓", t:"ayuda" }, { e:"🛏️", t:"descansar" }, { e:"🔇", t:"menos ruido" },
+    { e:"🏁", t:"terminar" }, { e:"🤝", t:"un amigo" }, { e:"📞", t:"a mi mamá" }, { e:"🩹", t:"una curita" } ] },
+  { id:"me-duele",texto:"Me duele",   color:"#fb7185", items:[
+    { e:"🧠", t:"la cabeza" }, { e:"🫃", t:"la panza" }, { e:"👄", t:"la garganta" }, { e:"🦷", t:"un diente" },
+    { e:"👂", t:"el oído" }, { e:"🦶", t:"el pie" }, { e:"✋", t:"la mano" }, { e:"😷", t:"todo el cuerpo" } ] }
+];
+const AAC_EXTRAS = [
+  { e:"⏰", t:"ahora" }, { e:"🎭", t:"más tarde" }, { e:"🚫", t:"no quiero" }, { e:"❤️", t:"te quiero" },
+  { e:"🤒", t:"estoy enfermo" }, { e:"🎉", t:"estoy contento" }
+];
+
+const ACCIONES_DIA = [
+  { emoji:"🌅", t:"me desperté", min:3 }, { emoji:"🦷", t:"me lavé los dientes", min:3 },
+  { emoji:"🥣", t:"desayuné", min:3 }, { emoji:"🏫", t:"fui al colegio", min:3 },
+  { emoji:"✏️", t:"pinté y dibujé", min:3 }, { emoji:"📚", t:"leí un libro", min:4 },
+  { emoji:"⚽", t:"jugué fútbol", min:3 }, { emoji:"🧩", t:"armé un rompecabezas", min:4 },
+  { emoji:"🍚", t:"almorcé", min:3 }, { emoji:"👥", t:"jugué con mis amigos", min:3 },
+  { emoji:"🐶", t:"jugué con mi perro", min:3 }, { emoji:"📺", t:"vi dibujitos", min:3 },
+  { emoji:"🛝", t:"me deslicé en el tobogán", min:4 }, { emoji:"🎨", t:"hice una manualidad", min:5 },
+  { emoji:"🧮", t:"hice sumas", min:5 }, { emoji:"🌧️", t:"me mojé con la lluvia", min:4 },
+  { emoji:"🛁", t:"me di un baño", min:3 }, { emoji:"🌙", t:"me puse la pijama", min:3 },
+  { emoji:"🤣", t:"me reí muchísimo", min:3 }, { emoji:"😴", t:"me quedé dormido en clase", min:5 },
+  { emoji:"🦖", t:"hice de dinosaurio", min:3 }, { emoji:"🧦", t:"me puse los calcetines al revés", min:4 },
+  { emoji:"🍮", t:"me comí un postre riquísimo", min:3 }, { emoji:"🎵", t:"bailé como loco", min:3 },
+  { emoji:"🐵", t:"hice una travesura", min:3 }, { emoji:"💨", t:"tiré un gas", min:3 },
+  { emoji:"🪤", t:"me hicieron una broma", min:4 }, { emoji:"🎭", t:"me disfracé", min:4 },
+  { emoji:"😖", t:"se me perdió un juguete", min:4 }, { emoji:"😢", t:"me caí", min:3 },
+  { emoji:"🌧️", t:"se me mojó la tarea", min:5 }, { emoji:"🥺", t:"extrañé a alguien", min:4 },
+  { emoji:"💔", t:"mi amigo no jugó conmigo", min:4 }, { emoji:"🌪️", t:"perdí un juego", min:4 },
+  { emoji:"😡", t:"me pelearon en el recreo", min:4 }, { emoji:"🚫", t:"me regañaron", min:4 },
+  { emoji:"😤", t:"me frustré con la tarea", min:5 }, { emoji:"🍌", t:"me resbalé con una cáscara", min:4 },
+  { emoji:"🐦", t:"un pajarito me hizo popó", min:4 }, { emoji:"🥛", t:"derramé mi leche", min:3 },
+  { emoji:"🎸", t:"inventé una canción tonta", min:4 }, { emoji:"🫧", t:"hice pompas de jabón gigantes", min:3 },
+  { emoji:"🏆", t:"gané una competencia", min:4 }, { emoji:"🎁", t:"recibí un regalo", min:3 },
+  { emoji:"🌟", t:"me felicitaron", min:4 }, { emoji:"🤝", t:"hice un nuevo amigo", min:4 },
+  { emoji:"🍰", t:"compartí mi torta", min:4 }, { emoji:"🐈", t:"un gato me siguió a casa", min:4 }
+];
+function diaAll(){ return ACCIONES_DIA.concat((S.customDia||[]).map(a=>({ emoji:a.emoji||"⭐", t:a.t, custom:true }))); }
+
+const CUENTOS = [
+  { id:"perrito", titulo:"El perrito perdido", portada:"🐶", min:3, escenas:[
+    { img:"🌧️🐕", texto:"Un día, Tomás encontró un perrito mojado en el parque." },
+    { img:"😢🐶", texto:"El perrito estaba triste porque se perdió.", q:{ p:"¿Por qué estaba triste?", ops:["Porque se perdió","Porque tenía hambre"], c:0 } },
+    { img:"🤗💧", texto:"Tomás le dio agua y lo abrazó." },
+    { img:"🐕❤️👦", texto:"Juntos buscaron al dueño y lo encontraron. ¡El perrito movió su colita feliz!" } ],
+    finalQ:[ { p:"¿Quién ayudó al perrito?", ops:["Tomás","Una gata"], c:0 } ] },
+  { id:"globos", titulo:"La noche de los globos", portada:"🎈", min:4, escenas:[
+    { img:"🎈🔴🔵🟡", texto:"Ana tenía tres globos: uno rojo, uno azul y uno amarillo." },
+    { img:"💨🎈", texto:"El viento sopló fuerte y el globo rojo se voló.", q:{ p:"¿Qué globo se voló?", ops:["El rojo","El azul"], c:0 } },
+    { img:"😭👧", texto:"Ana lloró, pero su abuela dijo: no te preocupes, hagamos otro." },
+    { img:"👵🟣😊", texto:"Hicieron un globo morado juntos y Ana sonrió." } ],
+    finalQ:[ { p:"¿Quién ayudó a Ana?", ops:["Su abuela","Su perro"], c:0 }, { p:"¿De qué color fue el globo nuevo?", ops:["Morado","Verde"], c:0 } ] },
+  { id:"gato", titulo:"El gato que no quería dormir", portada:"🐱", min:3, escenas:[
+    { img:"🐱🌙", texto:"Michi era un gato que no quería dormir de noche." },
+    { img:"🐈🔭", texto:"Miraba la luna y las estrellas por la ventana." },
+    { img:"🐱😴", texto:"Al día siguiente, Michi tenía tanto sueño que no podía jugar." },
+    { img:"🌙🛏️", texto:"Esa noche Michi se acostó temprano y durmió muy bien. ¡Zzz!" } ],
+    finalQ:[ { p:"¿Qué miraba Michi por la ventana?", ops:["La luna y estrellas","La televisión"], c:0 } ] },
+  { id:"tortuga", titulo:"La tortuga que llegó primero", portada:"🐢", min:4, escenas:[
+    { img:"🐇🐢", texto:"El conejo se rió de la tortuga porque caminaba lento." },
+    { img:"🏁🐇", texto:"Hicieron una carrera. El conejo salió rapidísimo." },
+    { img:"🐇😴🌳", texto:"El conejo se durmió debajo de un árbol porque iba ganando." },
+    { img:"🐢🏅", texto:"La tortuga siguió caminando sin parar y llegó primera. ¡Ganó!" } ],
+    finalQ:[ { p:"¿Quién ganó la carrera?", ops:["La tortuga","El conejo"], c:0 }, { p:"¿Por qué ganó la tortuga?", ops:["No se rindió","Corrió rápido"], c:0 } ] },
+  { id:"darius", titulo:"Darius y las restas mágicas", portada:"🧙", min:5, escenas:[
+    { img:"🧙‍♂️✨", texto:"Un mago le regaló a Darius una caja con 10 monedas mágicas." },
+    { img:"🪙🍦", texto:"Darius compró un helado con 3 monedas." },
+    { img:"🪙🎡", texto:"Luego gastó 2 monedas más en un juego." },
+    { img:"🪙❤️😊", texto:"Darius entendió que restar es ver cuánto queda. ¡Y se sintió muy listo!" } ],
+    finalQ:[ { p:"Si tenía 10 y gastó 3, ¿cuánto queda?", ops:["7","8"], c:0 }, { p:"Si tenía 7 y gastó 2, ¿cuánto queda?", ops:["5","6"], c:0 } ] },
+  { id:"timido", titulo:"El dragón tímido", portada:"🐲", min:5, escenas:[
+    { img:"🐲🌳", texto:"Nube era un dragón pequeño que se escondía detrás de los árboles." },
+    { img:"🔥😢", texto:"Tenía miedo de hacer fuego porque podía romper algo." },
+    { img:"🐲🤝👧", texto:"Una niña llamada Lua le dijo: tu fuego también puede calentar." },
+    { img:"🔥🍿🎉", texto:"Nube hizo palomitas para todos. ¡Su fuego podía ayudar!" } ],
+    finalQ:[ { p:"¿Quién ayudó a Nube?", ops:["Una niña","Un caballero"], c:0 } ] },
+  { id:"sofia", titulo:"El cumpleaños de Sofía", portada:"🎂", min:4, escenas:[
+    { img:"👧🎂", texto:"Sofía cumplía 6 años y preparó una fiesta con su mamá." },
+    { img:"🎈🍰", texto:"Pusieron globos, una torta de chocolate y jugo de naranja." },
+    { img:"🌧️😟", texto:"De pronto empezó a llover y Sofía se puso triste porque la fiesta era en el jardín." },
+    { img:"🏠🎉", texto:"Pero su papá dijo: ¡hagamos la fiesta adentro! Y todos bailaron felices." } ],
+    finalQ:[ { p:"¿Por qué se puso triste Sofía?", ops:["Porque llovió","Porque no hubo torta"], c:0 }, { p:"¿Dónde hicieron la fiesta?", ops:["Adentro","En el jardín"], c:0 } ] },
+  { id:"semilla", titulo:"La semilla paciente", portada:"🌱", min:4, escenas:[
+    { img:"👦🌱", texto:"Luis plantó una semilla y la regó cada día." },
+    { img:"😔🪴", texto:"Pasaron días y no salía nada. Luis pensó que había fallado." },
+    { img:"🤗🌳", texto:"Su mamá le dijo: las semillas necesitan tiempo, igual que las palabras." },
+    { img:"🌻😄", texto:"Una mañana apareció una flor gigante. ¡La espera valió la pena!" } ],
+    finalQ:[ { p:"¿Qué hizo Luis cada día?", ops:["Regó la semilla","Le cantó"], c:0 } ] },
+  { id:"colores", titulo:"El pájaro sin color", portada:"🐦", min:3, escenas:[
+    { img:"🐦☁️", texto:"Pipo era un pajarito blanco y quería tener colores." },
+    { img:"🐦🍓", texto:"Se bañó en jugo de fresa y se puso rojo." },
+    { img:"🐦🥑", texto:"Luego se bañó en aguacate y se puso verde." },
+    { img:"🐦🌈😊", texto:"Al final tenía tantas manchas de colores que parecía un arcoíris. ¡Era único!" } ],
+    finalQ:[ { p:"¿De qué color era Pipo al principio?", ops:["Blanco","Rojo"], c:0 } ] },
+  { id:"espacial", titulo:"El astronauta con sueño", portada:"👨‍🚀", min:5, escenas:[
+    { img:"👨‍🚀🚀", texto:"El astronauta Leo viajó a la luna en su cohete." },
+    { img:"🌕😴", texto:"En la luna se le ocurrió dormir una siesta flotando." },
+    { img:"💤🚀", texto:"Al despertar, su cohete se estaba alejando flotando." },
+    { img:"👨‍🚀✨🚀", texto:"Leo nadó por el espacio, lo alcanzó y volvió a casa. ¡Qué aventura!" } ],
+    finalQ:[ { p:"¿A dónde viajó Leo?", ops:["A la luna","Al mar"], c:0 }, { p:"¿Qué le pasó al cohete?", ops:["Se alejó flotando","Se rompió"], c:0 } ] },
+  { id:"bruja", titulo:"La bruja buena", portada:"🧙‍♀️", min:5, escenas:[
+    { img:"🧙‍♀️🐈‍⬛", texto:"Rosa era una bruja que hacía magia con sonrisas." },
+    { img:"🌧️🙁", texto:"Un día el pueblo estaba gris porque llovía sin parar." },
+    { img:"🧙‍♀️✨", texto:"Rosa preparó una poción de risas y la esparció con su escoba." },
+    { img:"🌈🤣", texto:"Todos rieron tanto que hasta la lluvia se pintó de colores." } ],
+    finalQ:[ { p:"¿Qué usaba Rosa para hacer magia?", ops:["Sonrisas","Truenos"], c:0 } ] },
+  { id:"sorpresa", titulo:"El hallazgo del parque", portada:"🎁", min:4, escenas:[
+    { img:"🎁🌳", texto:"Un {a} llamado Tito encontró {f} escondido bajo un árbol del parque." },
+    { img:"✨😲", texto:"¡Qué emoción! El hallazgo era de color {c} y brillaba muchísimo." },
+    { img:"🤔💭", texto:"A Tito le gustaba muchísimo, pero pensó: esto no es mío, debo buscar a su dueño." },
+    { img:"🤝😄", texto:"El dueño le dijo: ¡eres súper honesto! Quédatelo. Y Tito sonrió con el corazón contento." } ],
+    finalQ:[ { p:"¿Qué encontró Tito en el parque?", ops:["{f}","una piedra","una nube"], c:0 },
+             { p:"¿De qué color era el hallazgo?", ops:["{c}","gris","no se sabe"], c:0 } ] },
+  { id:"gloton", titulo:"El dragón glotón", portada:"🐲", min:3, escenas:[
+    { img:"🐲😋", texto:"Darius el dragón tenía hambre y quería comer {f}." },
+    { img:"🐲🏠", texto:"Buscó por toda su casa, que era de color {c}, ¡pero no encontró nada de comer!" },
+    { img:"🐭🤝", texto:"Un {a} pequeño le compartió su merienda sin pensarlo dos veces." },
+    { img:"🐲😊", texto:"Darius aprendió que compartir y pedir ayuda con palabras siempre funciona. ¡Y cenaron juntos!" } ],
+    finalQ:[ { p:"¿Quién le compartió merienda al dragón?", ops:["Un {a}","Un monstruo","Nadie"], c:0 },
+             { p:"¿Qué quería comer el dragón?", ops:["{f}","piedras","zapatos"], c:0 } ] },
+  { id:"cohete", titulo:"El viaje espacial de Lula", portada:"🚀", min:5, escenas:[
+    { img:"🚀👧", texto:"Lula soñaba con viajar a Marte en {f}." },
+    { img:"🛠️💪", texto:"Construyó su nave con piezas de color {c} que encontró en su taller." },
+    { img:"🔴😲", texto:"Al despegar, un {a} escondido subió con ella sin darse cuenta." },
+    { img:"🚀😄🤝", texto:"En Marte se hicieron mejores amigos y prometieron volver a viajar juntos. ¡Misión cumplida!" } ],
+    finalQ:[ { p:"¿A qué planeta viajó Lula?", ops:["Marte","La Luna","El Sol"], c:0 },
+             { p:"¿Quién se escondió en la nave?", ops:["Un {a}","Un dinosaurio","Su mamá"], c:0 } ] },
+  { id:"dino", titulo:"El dinosaurio que no rugía", portada:"🦖", min:4, escenas:[
+    { img:"🦖😰", texto:"Tito era un dinosaurio enorme, pero su rugido salía muy bajito: ¡pío!" },
+    { img:"🦖🌋", texto:"Los otros dinosaurios se reían y Tito se escondía detrás de una roca." },
+    { img:"🦖💪", texto:"Un día decidió practicar su rugido cada mañana, sin rendirse." },
+    { img:"🦖🔊🎉", texto:"Al cabo de un mes su rugido sonó tan fuerte que hizo temblar el volcán. ¡Lo logró practicando!" } ],
+    finalQ:[ { p:"¿Qué hizo Tito para lograr su rugido?", ops:["Practicar","Dormir"], c:0 } ] },
+  { id:"pirata", titulo:"El pirata que perdió su barco", portada:"🏴‍☠️", min:4, escenas:[
+    { img:"🏴‍☠️⛵", texto:"El capitán Bruno tenía un barco veloz llamado La Estrella." },
+    { img:"⛵💨", texto:"Una noche de tormenta, el viento se llevó el barco muy lejos." },
+    { img:"🏴‍☠️🛶", texto:"Bruno no lloró: construyó un bote pequeño con tablas y velas." },
+    { img:"🏴‍☠️⛵😄", texto:"Navegó tras su barco y lo encontró en una isla. ¡Nunca se dio por vencido!" } ],
+    finalQ:[ { p:"¿Qué construyó Bruno para buscar su barco?", ops:["Un bote","Un avión"], c:0 } ] },
+  { id:"bombero", titulo:"El bombero y el gatito", portada:"🚒", min:4, escenas:[
+    { img:"🚒🚨", texto:"El bombero Mateo escuchó que un gatito estaba atrapado en un árbol." },
+    { img:"🌳🐱", texto:"El árbol era altísimo y el gatito lloraba arriba: ¡miau, miau!" },
+    { img:"🚒🪜", texto:"Mateo subió su escalera más larga, paso a paso, con mucho cuidado." },
+    { img:"🐱🤗", texto:"Bajó al gatito en brazos y su dueño le dio un gran abrazo. ¡Ayudar se siente genial!" } ],
+    finalQ:[ { p:"¿Dónde estaba atrapado el gatito?", ops:["En un árbol","En un pozo"], c:0 } ] },
+  { id:"mochila", titulo:"El monstruo de la mochila", portada:"👹", min:4, escenas:[
+    { img:"👹🎒", texto:"Nico tenía un monstruo pequeño que vivía dentro de su mochila." },
+    { img:"👹🍞", texto:"El monstruo se comía las loncheras cuando nadie lo veía. ¡Qué tramposo!" },
+    { img:"👦👹🗣️", texto:"Nico le habló con firmeza: ¡basta! También quiero comer mi pan." },
+    { img:"👹🤝😊", texto:"El monstruo pidió perdón y desde entonces solo cuidaba la mochila. ¡Hablar resolvió el problema!" } ],
+    finalQ:[ { p:"¿Qué hizo Nico para resolver el problema?", ops:["Hablar con el monstruo","Esconder la mochila"], c:0 } ] },
+  { id:"futbol", titulo:"El partido de fútbol de Nico", portada:"⚽", min:5, escenas:[
+    { img:"⚽🏟️", texto:"El equipo de Nico jugaba la final del campeonato del barrio." },
+    { img:"⚽😮", texto:"Al principio Nico falló dos goles y se sintió triste." },
+    { img:"⚽💪", texto:"Su entrenador le dijo: los campeones siguen intentando." },
+    { img:"⚽🎉", texto:"En el último minuto Nico anotó el gol del triunfo. ¡Su equipo ganó la copa!" } ],
+    finalQ:[ { p:"¿Qué le dijo el entrenador?", ops:["Que siga intentando","Que se vaya a casa"], c:0 } ] },
+  { id:"heroe", titulo:"El superhéroe tímido", portada:"🦸", min:5, escenas:[
+    { img:"🦸🙈", texto:"Max era un superhéroe con capa voladora, pero era muy tímido para hablar." },
+    { img:"🦸💭", texto:"Tenía muchas ideas para ayudar, pero le daba pena decirlas." },
+    { img:"🦸🗣️", texto:"Un día respiró hondo, levantó la mano y contó su plan: ¡rescatar el gato del vecino!" },
+    { img:"🦸🐱🤗", texto:"Todos aplaudieron su idea. Max descubrió que su voz también era un superpoder." } ],
+    finalQ:[ { p:"¿Cuál era el superpoder escondido de Max?", ops:["Su voz","Su vista"], c:0 } ] },
+  { id:"caballo", titulo:"El caballo que bailaba", portada:"🐴", min:4, escenas:[
+    { img:"🐴🎶", texto:"Relámpago era un caballo que en vez de correr, le encantaba bailar." },
+    { img:"🐴😬", texto:"Los otros caballos decían que los caballos no bailan, que corren." },
+    { img:"🐴💃", texto:"Pero Relámpago practicaba sus pasos cada día en el campo." },
+    { img:"🐴🏆😄", texto:"En la feria del pueblo, su baile ganó el primer premio. ¡Ser diferente lo hizo campeón!" } ],
+    finalQ:[ { p:"¿Qué le gustaba hacer a Relámpago?", ops:["Bailar","Dormir"], c:0 } ] },
+  { id:"pinguino", titulo:"El pingüino que tenía frío", portada:"🐧", min:3, escenas:[
+    { img:"🐧🥶", texto:"Pipo era un pingüino que siempre tenía frío, incluso entre todos sus amigos." },
+    { img:"🐧🧣", texto:"Su abuela le tejió una bufanda roja grandísima." },
+    { img:"🐧😊", texto:"Con su bufanda, Pipo jugó en la nieve todo el día." },
+    { img:"🐧🐧🐧", texto:"Y al final del día, sus amigos se acurrucaron junto a él. ¡El cariño da el calor más rico!" } ],
+    finalQ:[ { p:"¿Qué le tejió la abuela de Pipo?", ops:["Una bufanda","Un gorro"], c:0 } ] },
+  { id:"robotrisa", titulo:"El robot que aprendió a reír", portada:"🤖", min:4, escenas:[
+    { img:"🤖🏭", texto:"Robi era un robot que sabía sumar muy rápido, pero nunca se reía." },
+    { img:"🤖❓", texto:"Sus amigos le contaban chistes y Robi solo decía: no lo entiendo." },
+    { img:"🤖🤣", texto:"Un día un perrito tropezó con su propia cola y cayó encima de Robi." },
+    { img:"🤖😄✨", texto:"Robi hizo un sonido raro: ¡ji, ji, ji! Estaba riendo. ¡Y le gustó muchísimo!" } ],
+    finalQ:[ { p:"¿Qué aprendió a hacer Robi?", ops:["Reír","Volar"], c:0 } ] },
+  { id:"osa", titulo:"La osa que cocinaba nubes", portada:"🐻", min:4, escenas:[
+    { img:"🐻☁️", texto:"Mela la osa tenía una olla mágica que cocinaba nubes." },
+    { img:"☁️🍦", texto:"Con las nubes hacía helados esponjosos para todos sus amigos." },
+    { img:"🌧️😞", texto:"Un día dejó de haber nubes y Mela se puso muy triste." },
+    { img:"🐻💨🤍", texto:"Entonces sopló burbujas de jabón y la olla las convirtió en nubes. ¡Nunca se rindió!" } ],
+    finalQ:[ { p:"¿Qué cocinaba Mela con las nubes?", ops:["Helados","Sopas"], c:0 } ] },
+  { id:"tren", titulo:"El tren de los colores", portada:"🚂", min:4, escenas:[
+    { img:"🚂🌈", texto:"Tito era un tren gris que soñaba con tener colores." },
+    { img:"🚂🌸", texto:"Cruzó un campo de flores y su cola se pintó de rosa." },
+    { img:"🚂🌊", texto:"Luego pasó junto al mar y sus ruedas se volvieron azules." },
+    { img:"🚂🌈😊", texto:"Al llegar a la estación, todos los niños dijeron: ¡es el tren más bonito del mundo!" } ],
+    finalQ:[ { p:"¿Qué color tomaron las ruedas de Tito junto al mar?", ops:["Azul","Verde"], c:0 } ] },
+  { id:"secreto", titulo:"🗝️ La Historia Secreta del Dragón", portada:"🗝️", min:3, secreta:true, escenas:[
+    { img:"🐉✨", texto:"Darius el dragón guardaba un secreto: tenía una estrella mágica que concedía deseos." },
+    { img:"😢⭐", texto:"Un día la estrella se apagó porque Darius se olvidó de usar sus palabras." },
+    { img:"🗣️🌟", texto:"Cada vez que Darius contaba su día con palabras mágicas, la estrella brillaba más." },
+    { img:"🌟🎆😊", texto:"Y así Darius aprendió: ¡las palabras son la magia más poderosa de todas!" } ],
+    finalQ:[ { p:"¿Qué hacía brillar a la estrella?", ops:["Usar sus palabras","Dormir mucho"], c:0 } ] }
+];
+
+const PUENTE = [
+  { a:"Comí pan", b:"bebí leche", c:"Y" }, { a:"Jugué en el parque", b:"fui a casa", c:"LUEGO" },
+  { a:"Lloré", b:"me caí", c:"PORQUE" }, { a:"Quise salir", b:"llovió", c:"PERO" },
+  { a:"Me lavé los dientes", b:"me acosté", c:"LUEGO" }, { a:"Estoy feliz", b:"me dieron un regalo", c:"PORQUE" },
+  { a:"Quería dulces", b:"mamá dijo que no", c:"PERO" }, { a:"Tengo un perro", b:"un gato", c:"Y" },
+  { a:"Hice la tarea", b:"vi dibujitos", c:"LUEGO" }, { a:"Estoy cansado", b:"jugué mucho", c:"PORQUE" },
+  { a:"El pastel se ve rico", b:"está quemado", c:"PERO" }, { a:"Desayuné", b:"me cepillé", c:"LUEGO" },
+  { a:"Estoy enojado", b:"me quitaron mi juguete", c:"PORQUE" }, { a:"Quería ganar", b:"llegué segundo", c:"PERO" },
+  { a:"Me gusta el azul", b:"el verde", c:"Y" }, { a:"Me puse la pijama", b:"leí un cuento", c:"LUEGO" },
+  { a:"No fui al parque", b:"estaba enfermo", c:"PORQUE" }, { a:"Quería ver TV", b:"primero hay que cenar", c:"PERO" },
+  { a:"Aprendí a sumar", b:"a restar", c:"Y" }, { a:"Vi una araña", b:"salí corriendo", c:"Y" }
+];
+const CONECTORES_INFO = [
+  { p:"Y", e:"🔗", u:"suma cosas: comí y bebí" },
+  { p:"LUEGO", e:"⏭️", u:"qué pasó después" },
+  { p:"PORQUE", e:"❓", u:"explica el porqué" },
+  { p:"PERO", e:"🔄", u:"cambia algo" }
+];
+
+const HISTORIA_PARTES = {
+  quien: [
+    { e:"👨‍🚀", t:"un astronauta valiente" }, { e:"🦖", t:"un dinosaurito verde" },
+    { e:"🐉", t:"Darius el dragón" }, { e:"🤖", t:"un robot amable" },
+    { e:"🐶", t:"un perrito curioso" }, { e:"🧙‍♀️", t:"una hada brillante" },
+    { e:"🦄", t:"un unicornio saltarín" }, { e:"🧜‍♂️", t:"un sireno del mar" } ],
+  donde: [
+    { e:"🚀", t:"en el espacio" }, { e:"🏰", t:"en un castillo" },
+    { e:"🌲", t:"en el bosque" }, { e:"🌊", t:"bajo el mar" },
+    { e:"🏝️", t:"en una isla" }, { e:"🏫", t:"en la escuela" },
+    { e:"🌋", t:"en un volcán dormido" }, { e:"🎪", t:"en un circo gigante" },
+    { e:"🧁", t:"en una ciudad de dulces" } ],
+  que: [
+    { e:"💎", t:"encontró un tesoro brillante" }, { e:"⭐", t:"perdió su estrella favorita" },
+    { e:"🤝", t:"hizo un nuevo amigo" }, { e:"🎈", t:"organizó una gran fiesta" },
+    { e:"🍰", t:"cocinó una torta gigante" }, { e:"🪄", t:"descubrió un poder mágico" },
+    { e:"🕳️", t:"cayó en un agujero misterioso" }, { e:"🎪", t:"aprendió a volar en trapecio" },
+    { e:"🐶", t:"rescató a un perrito perdido" } ],
+  final: [
+    { e:"🎉", t:"y todos celebraron con una fiesta gigante" },
+    { e:"🏡", t:"y volvió a casa para contar su aventura" },
+    { e:"🌟", t:"y se convirtió en el héroe de ese lugar" },
+    { e:"🤗", t:"y abrazó a su nuevo mejor amigo" },
+    { e:"😴", t:"y se durmió soñando su próxima aventura" },
+    { e:"😂", t:"y todos se rieron tanto que se olvidaron de dormir" } ]
+};
+
+const PROBLEMAS = [
+  { e:"🍎", p:"Ana tiene 3 manzanas y su mamá le da 2 más. ¿Cuántas tiene ahora?", ops:[5,6], c:0 },
+  { e:"🎈", p:"Había 6 globos y 2 se volaron. ¿Cuántos quedan?", ops:[4,3], c:0 },
+  { e:"🍪", p:"Tienes 4 galletas y comes 1. ¿Cuántas quedan?", ops:[3,2], c:0 },
+  { e:"⚽", p:"En el patio hay 5 niños jugando y llegan 3 más. ¿Cuántos hay?", ops:[8,7], c:0 },
+  { e:"🐟", p:"En la pecera había 8 peces y se escaparon 3. ¿Cuántos quedan?", ops:[5,6], c:0 },
+  { e:"🎁", p:"Tienes 2 regalos y tu tía te trae 2 más. ¿Cuántos tienes?", ops:[4,5], c:0 },
+  { e:"🌟", p:"Ganaste 10 estrellas y gastaste 4. ¿Cuántas te quedan?", ops:[6,7], c:0 },
+  { e:"🚗", p:"En el estacionamiento hay 7 carros y se van 2. ¿Cuántos quedan?", ops:[5,4], c:0 },
+  { e:"🐦", p:"2 pajaritos se paran en el árbol y llegan 2 más. ¿Cuántos son?", ops:[4,3], c:0 },
+  { e:"🍬", p:"Tienes 9 caramelos y regalas 5. ¿Cuántos te quedan?", ops:[4,3], c:0 }
+];
+
+const ENG_VOCAB = [
+  { cat:"🐶 Animales", items:[
+    { e:"🐶", en:"dog", es:"perro" }, { e:"🐱", en:"cat", es:"gato" }, { e:"🐦", en:"bird", es:"pájaro" },
+    { e:"🐟", en:"fish", es:"pez" }, { e:"🐴", en:"horse", es:"caballo" }, { e:"🐘", en:"elephant", es:"elefante" },
+    { e:"🦁", en:"lion", es:"león" }, { e:"🐯", en:"tiger", es:"tigre" }, { e:"🐵", en:"monkey", es:"mono" },
+    { e:"🐰", en:"rabbit", es:"conejo" }, { e:"🐻", en:"bear", es:"oso" }, { e:"🐸", en:"frog", es:"rana" },
+    { e:"🐍", en:"snake", es:"serpiente" }, { e:"🐔", en:"chicken", es:"gallina" }, { e:"🐧", en:"penguin", es:"pingüino" },
+    { e:"🦄", en:"unicorn", es:"unicornio" }, { e:"🐝", en:"bee", es:"abeja" }, { e:"🦋", en:"butterfly", es:"mariposa" },
+    { e:"🐢", en:"turtle", es:"tortuga" }, { e:"🐬", en:"dolphin", es:"delfín" } ] },
+  { cat:"🎨 Colores", items:[
+    { e:"🔴", en:"red", es:"rojo" }, { e:"🔵", en:"blue", es:"azul" }, { e:"🟢", en:"green", es:"verde" },
+    { e:"🟡", en:"yellow", es:"amarillo" }, { e:"🟣", en:"purple", es:"morado" }, { e:"🟠", en:"orange", es:"naranja" },
+    { e:"⚪", en:"white", es:"blanco" }, { e:"⚫", en:"black", es:"negro" }, { e:"🟤", en:"brown", es:"marrón" },
+    { e:"💖", en:"pink", es:"rosa" }, { e:"🩶", en:"gray", es:"gris" }, { e:"✨", en:"golden", es:"dorado" } ] },
+  { cat:"🔢 Números", items:[
+    { e:"1️⃣", en:"one", es:"uno" }, { e:"2️⃣", en:"two", es:"dos" }, { e:"3️⃣", en:"three", es:"tres" },
+    { e:"4️⃣", en:"four", es:"cuatro" }, { e:"5️⃣", en:"five", es:"cinco" }, { e:"6️⃣", en:"six", es:"seis" },
+    { e:"7️⃣", en:"seven", es:"siete" }, { e:"8️⃣", en:"eight", es:"ocho" }, { e:"9️⃣", en:"nine", es:"nueve" },
+    { e:"🔟", en:"ten", es:"diez" }, { e:"2️⃣0", en:"twenty", es:"veinte" }, { e:"1️⃣0️⃣0", en:"one hundred", es:"cien" } ] },
+  { cat:"🍽️ Comida", items:[
+    { e:"🍎", en:"apple", es:"manzana" }, { e:"🍌", en:"banana", es:"banana" }, { e:"🍞", en:"bread", es:"pan" },
+    { e:"🥛", en:"milk", es:"leche" }, { e:"💧", en:"water", es:"agua" }, { e:"🎂", en:"cake", es:"torta" },
+    { e:"🍊", en:"orange", es:"naranja" }, { e:"🍇", en:"grapes", es:"uvas" }, { e:"🍓", en:"strawberry", es:"fresa" },
+    { e:"🥚", en:"egg", es:"huevo" }, { e:"🍚", en:"rice", es:"arroz" }, { e:"🍕", en:"pizza", es:"pizza" },
+    { e:"🧃", en:"juice", es:"jugo" }, { e:"🍪", en:"cookie", es:"galleta" }, { e:"🍦", en:"ice cream", es:"helado" },
+    { e:"🥕", en:"carrot", es:"zanahoria" }, { e:"🌽", en:"corn", es:"maíz" }, { e:"🥑", en:"avocado", es:"aguacate" } ] },
+  { cat:"👨‍👩‍👧 Familia", items:[
+    { e:"👩", en:"mom", es:"mamá" }, { e:"👨", en:"dad", es:"papá" }, { e:"👦", en:"boy", es:"niño" },
+    { e:"👧", en:"girl", es:"niña" }, { e:"👶", en:"baby", es:"bebé" }, { e:"👵", en:"grandma", es:"abuela" },
+    { e:"👴", en:"grandpa", es:"abuelo" }, { e:"🧑", en:"brother", es:"hermano" }, { e:"👧", en:"sister", es:"hermana" },
+    { e:"👨‍👩‍👦", en:"family", es:"familia" }, { e:"🫂", en:"friend", es:"amigo" }, { e:"🐶", en:"pet", es:"mascota" } ] },
+  { cat:"🧍 Mi cuerpo", items:[
+    { e:"👀", en:"eyes", es:"ojos" }, { e:"👂", en:"ears", es:"orejas" }, { e:"👃", en:"nose", es:"nariz" },
+    { e:"👄", en:"mouth", es:"boca" }, { e:"🖐️", en:"hand", es:"mano" }, { e:"🦶", en:"foot", es:"pie" },
+    { e:"💪", en:"arm", es:"brazo" }, { e:"🦵", en:"leg", es:"pierna" }, { e:"🦷", en:"tooth", es:"diente" },
+    { e:"💇", en:"hair", es:"pelo" }, { e:"❤️", en:"heart", es:"corazón" }, { e:"🧠", en:"brain", es:"cerebro" } ] },
+  { cat:"👕 Ropa", items:[
+    { e:"👕", en:"shirt", es:"polo" }, { e:"👖", en:"pants", es:"pantalón" }, { e:"🧢", en:"cap", es:"gorra" },
+    { e:"🧦", en:"socks", es:"medias" }, { e:"👟", en:"shoes", es:"zapatillas" }, { e:"🧥", en:"jacket", es:"chompa" },
+    { e:"👗", en:"dress", es:"vestido" }, { e:"🧣", en:"scarf", es:"bufanda" }, { e:"🩳", en:"shorts", es:"short" } ] },
+  { cat:"🚗 Transporte", items:[
+    { e:"🚗", en:"car", es:"auto" }, { e:"🚌", en:"bus", es:"bus" }, { e:"🚲", en:"bicycle", es:"bicicleta" },
+    { e:"✈️", en:"airplane", es:"avión" }, { e:"🚂", en:"train", es:"tren" }, { e:"🚁", en:"helicopter", es:"helicóptero" },
+    { e:"🚀", en:"rocket", es:"cohete" }, { e:"🛴", en:"scooter", es:"scooter" }, { e:"⛵", en:"boat", es:"bote" } ] },
+  { cat:"🧸 Juguetes", items:[
+    { e:"⚽", en:"ball", es:"pelota" }, { e:"🧸", en:"teddy bear", es:"osito" }, { e:"🎈", en:"balloon", es:"globo" },
+    { e:"🪁", en:"kite", es:"cometa" }, { e:"🎲", en:"dice", es:"dado" }, { e:"🧩", en:"puzzle", es:"rompecabezas" },
+    { e:"🚂", en:"toy train", es:"tren de juguete" }, { e:"🎮", en:"videogame", es:"videojuego" }, { e:"🪀", en:"yoyo", es:"yoyo" } ] },
+  { cat:"🌤️ Clima y naturaleza", items:[
+    { e:"☀️", en:"sun", es:"sol" }, { e:"🌙", en:"moon", es:"luna" }, { e:"⭐", en:"star", es:"estrella" },
+    { e:"☁️", en:"cloud", es:"nube" }, { e:"🌧️", en:"rain", es:"lluvia" }, { e:"🌈", en:"rainbow", es:"arcoíris" },
+    { e:"⚡", en:"lightning", es:"rayo" }, { e:"❄️", en:"snow", es:"nieve" }, { e:"💨", en:"wind", es:"viento" },
+    { e:"🌳", en:"tree", es:"árbol" }, { e:"🌸", en:"flower", es:"flor" }, { e:"🌊", en:"sea", es:"mar" },
+    { e:"🏔️", en:"mountain", es:"montaña" }, { e:"🔥", en:"fire", es:"fuego" }, { e:"🌍", en:"Earth", es:"Tierra" } ] },
+  { cat:"🏠 En mi casa", items:[
+    { e:"🏠", en:"house", es:"casa" }, { e:"🚪", en:"door", es:"puerta" }, { e:"🪟", en:"window", es:"ventana" },
+    { e:"🛏️", en:"bed", es:"cama" }, { e:"🪥", en:"toothbrush", es:"cepillo de dientes" }, { e:"🛁", en:"bathtub", es:"tina" },
+    { e:"🚽", en:"toilet", es:"baño" }, { e:"🪑", en:"chair", es:"silla" }, { e:"🛋️", en:"sofa", es:"sillón" },
+    { e:"🍳", en:"kitchen", es:"cocina" }, { e:"💡", en:"light", es:"luz" }, { e:"📺", en:"television", es:"televisión" } ] },
+  { cat:"🏃 Acciones", items:[
+    { e:"🏃", en:"to run", es:"correr" }, { e:"🤸", en:"to jump", es:"saltar" }, { e:"😴", en:"to sleep", es:"dormir" },
+    { e:"🍽️", en:"to eat", es:"comer" }, { e:"🥤", en:"to drink", es:"beber" }, { e:"🗣️", en:"to talk", es:"hablar" },
+    { e:"👂", en:"to listen", es:"escuchar" }, { e:"👀", en:"to look", es:"mirar" }, { e:"✍️", en:"to write", es:"escribir" },
+    { e:"📖", en:"to read", es:"leer" }, { e:"🎨", en:"to paint", es:"pintar" }, { e:"💃", en:"to dance", es:"bailar" },
+    { e:"🤝", en:"to hug", es:"abrazar" }, { e:"😄", en:"to smile", es:"sonreír" }, { e:"🏊", en:"to swim", es:"nadar" },
+    { e:"🚀", en:"to fly", es:"volar" }, { e:"🎤", en:"to sing", es:"cantar" }, { e:"🧼", en:"to wash", es:"lavarse" } ] }
+];
+const ENG_FRASES = [
+  { e:"👋", en:"Hello!", es:"¡Hola!" }, { e:"😊", en:"Good morning", es:"Buenos días" },
+  { e:"🌙", en:"Good night", es:"Buenas noches" }, { e:"🙏", en:"Thank you", es:"Gracias" },
+  { e:"🙏", en:"Please", es:"Por favor" }, { e:"👋", en:"Goodbye!", es:"¡Adiós!" },
+  { e:"🙋", en:"Excuse me", es:"Permiso" }, { e:"🤝", en:"Nice to meet you", es:"Mucho gusto" },
+  { e:"❤️", en:"I love you", es:"Te quiero" }, { e:"😍", en:"I like it!", es:"¡Me gusta!" },
+  { e:"👎", en:"I don't like it", es:"No me gusta" }, { e:"😠", en:"I'm angry", es:"Estoy enojado" },
+  { e:"😢", en:"I'm sad", es:"Estoy triste" }, { e:"😄", en:"I'm happy!", es:"¡Estoy feliz!" },
+  { e:"😲", en:"I'm surprised!", es:"¡Estoy sorprendido!" }, { e:"😨", en:"I'm scared", es:"Tengo miedo" },
+  { e:"🥱", en:"I'm tired", es:"Estoy cansado" }, { e:"🍎", en:"I'm hungry", es:"Tengo hambre" },
+  { e:"🥤", en:"I'm thirsty", es:"Tengo sed" }, { e:"💤", en:"I'm sleepy", es:"Tengo sueño" },
+  { e:"🤔", en:"What is this?", es:"¿Qué es esto?" }, { e:"❓", en:"Where are you?", es:"¿Dónde estás?" },
+  { e:"🚀", en:"Let's play!", es:"¡Vamos a jugar!" }, { e:"⚽", en:"Let's play soccer", es:"Vamos a jugar fútbol" },
+  { e:"📖", en:"Read me a story", es:"Léeme un cuento" }, { e:"🎨", en:"Can I draw?", es:"¿Puedo dibujar?" },
+  { e:"🤗", en:"I need a hug", es:"Necesito un abrazo" }, { e:"🆘", en:"Help me, please", es:"Ayúdame, por favor" },
+  { e:"🚽", en:"I need the bathroom", es:"Necesito el baño" }, { e:"🤒", en:"I feel sick", es:"Me siento mal" }
+];
+
+// ---------- PANTALLAS ----------
+const SCREENS = {};
+
+SCREENS.home = function(){
+  ensureToday(); applyTheme(); renderDragonFab();
+  const missions = todaysMissions();
+  const t = S.totalStars;
+  const hat = t >= 10 ? '<span class="hat">👑</span>' : '';
+  const avgLvl = Math.round((Object.keys(S.worlds).reduce((a,w)=>a+worldLevel(w),0))/Object.keys(S.worlds).length*10)/10;
+
+  let mHtml = missions.map(m=>{
+    const done = S.today.missions.includes(m.id);
+    const targetWorld = m.worlds[0];
+    return '<div class="mission-item ' + (done?'done':'') + '" onclick="sfx.tap();go(\'world\',{param:\'' + targetWorld + '\'})">' +
+      '<div class="mcheck">' + (done?'✓':(m.e||'🎯')) + '</div>' +
+      '<span>' + m.label + '</span></div>';
+  }).join("");
+  const allDone = missions.every(m=>S.today.missions.includes(m.id));
+
+  const worldHtml = WORLDS.map(w=>{
+    const lvl = worldLevel(w.id);
+    const pct = (S.worlds[w.id].ok % 4) * 25;
+    return '<div class="world" style="background:' + w.color + '" onclick="sfx.tap();go(\'world\',{param:\'' + w.id + '\'})">' +
+      '<div class="wemoji floaty">' + w.emoji + '</div>' +
+      '<div class="winfo"><b>' + w.name + '</b><small>' + w.desc + '</small>' +
+      '<div class="lvlbar"><i style="width:' + pct + '%"></i></div></div>' +
+      '<div class="wstars">Nv ' + lvl + ' · ' + S.worlds[w.id].ok + '⭐</div></div>';
+  }).join("");
+
+  const prizeHtml = UNLOCKS.map(u=>{
+    const got = t >= u.at;
+    if(got && u.tipo==="mundo"){
+      return '<div class="unlockrow won" onclick="usePrize(' + JSON.stringify(u).replace(/"/g,'&quot;') + ')"><span style="font-size:22px">' + u.emoji + '</span><span>' + u.label.replace(" desbloqueado! Tócalo para viajar.","") + ' <small style="color:#0284c7">· ¡tócalo para viajar!</small></span><span style="margin-left:auto;font-size:12px;background:#fef9c3;padding:2px 8px;border-radius:99px">' + u.at + ' ⭐</span></div>';
+    }
+    return '<div class="unlockrow ' + (got?'won':'locked2') + '"' + (got?' onclick="showPrizeModal(' + JSON.stringify(u).replace(/"/g,'&quot;') + ')"':'') + '><span style="font-size:22px">' + (got?u.emoji:"🔒") + '</span><span>' + u.label + (got?' <small style="color:#0284c7">· ¡tócalo para verlo!</small>':'') + '</span><span style="margin-left:auto;font-size:12px;background:#f1f5f9;padding:2px 8px;border-radius:99px">' + u.at + ' ⭐</span></div>';
+  }).join("");
+
+  return '<div class="topbar">' +
+    '<div class="avatar floaty" onclick="randomDragon()">🐉' + (esNina() ? "🎀" : "") + hat + '</div>' +
+    '<div class="hello">' +
+      '<div class="hello-row"><h1>¡Hola, ' + S.name + '!</h1><span class="speech-pill">💬 ' + dragonTip() + '</span></div>' +
+      '<span class="lvlbadge">🏆 Eres ' + (esNina() ? "una campeona" : "un campeón") + ' · Nivel global ' + avgLvl + ' · 🐉 ' + dragonsCollection().length + ' en mi colección</span>' +
+    '</div>' +
+    '<div class="starbox"><span class="st">⭐</span><span id="starcount">' + S.stars + '</span></div>' +
+  '</div>' +
+
+  '<div class="card">' +
+    '<div class="missions-header">' +
+      '<h2>🎯 Misión de hoy <small style="font-size:11px;color:#64748b;font-weight:800">(toca una misión para ir directo)</small></h2>' +
+      '<div class="giftrow ' + (allDone?'ready':'') + '">' + (allDone?'🎁 ¡Misión completada! Bonus ganado':'🎁 Completa las 3 misiones: +2 ⭐') + '</div>' +
+    '</div>' +
+    '<div class="missions-grid">' + mHtml + '</div>' +
+  '</div>' +
+
+  '<div class="sectiontitle"><span>🗺️ MAPA DE MUNDOS · ¡todos abiertos para ti!</span></div>' +
+  '<div class="map">' + worldHtml + '</div>' +
+
+  '<div class="card"><h2>🏆 Mis premios (' + UNLOCKS.filter(u=>t>=u.at).length + '/' + UNLOCKS.length + ')</h2>' + prizeHtml + '</div>' +
+
+  '<button class="dadbtn" onclick="askAdultConfirmation(function(){ go(\'dad\'); }, \'Resuelve esta verificación para abrir el Modo Papá.\')">👨‍👩‍👦 Modo Papá 🔒</button>';
+};
+
+function dragonTip(){
+  const tips = [
+    "¡Toca un mundo y ganemos estrellas juntos!",
+    "Recuerda: después de escuchar, ¡repite la frase tú también!",
+    "Las palabras mágicas unen tus ideas. ¿Probamos?",
+    "¡Cuéntame tu día! Yo te ayudo a contarlo bonito.",
+    "Cada estrella me hace más fuerte. ¡Vamos!",
+    "Toca mi botón 🐉 abajo ¡y verás quién saluda!",
+    "Las estrellas te dan premios, dragones y mundos nuevos."
+  ];
+  return tips[(new Date().getDate() + new Date().getHours()) % tips.length];
+}
+
+SCREENS.world = function(opts){
+  const wid = opts.param;
+  const w = WORLDS.find(x=>x.id===wid) || WORLDS[0];
+  const lvl = worldLevel(wid);
+  return '<div style="padding-top:52px">' +
+    '<div class="card" style="background:' + w.color + ';margin-bottom:14px">' +
+      '<h2 style="color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.3)">' + w.emoji + ' ' + w.name + ' · Nivel ' + lvl + '</h2>' +
+      '<p style="color:#fff;font-weight:800;font-size:13px">' + w.desc + '</p></div>' +
+    '<div id="worldbody"></div></div>';
+};
+function mountWorld(wid){
+  const el = document.getElementById("worldbody");
+  if(!el) return;
+  if(wid!=="juegos"){ llStop(); csStop(); }
+  if(wid==="siento") el.innerHTML = sientoHtml();
+  if(wid==="necesito") el.innerHTML = aacHtml();
+  if(wid==="dia") el.innerHTML = diaHtml();
+  if(wid==="cuentos") el.innerHTML = cuentosHtml();
+  if(wid==="puente") el.innerHTML = puenteHtml();
+  if(wid==="mate") el.innerHTML = mateHtml();
+  if(wid==="english") el.innerHTML = englishHtml();
+  if(wid==="crear") el.innerHTML = crearHtml();
+  if(wid==="dibujar"){ el.innerHTML = dibujarHtml(); setTimeout(initPizarra, 60); }
+  if(wid==="juegos"){ el.innerHTML = juegosHtml(); setTimeout(mountJuegoActivo, 40); }
+}
+
+// ===== MUNDO 1: EMOCIONES =====
+let emoSel = null, emoNivel = "normal", emoMotivoIdx = -1, emoCustomTxt = "";
+function sientoHtml(){
+  emoSel=null; emoNivel="normal"; emoMotivoIdx=-1;
+  return '<div class="card"><h2>Paso 1 · ¿Cómo te sientes?</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(4,1fr)">' +
+    EMOCIONES.map(e=>'<div class="chip" style="background:' + e.c + '" onclick="pickEmo(' + EMOCIONES.indexOf(e) + ')"><span class="big">' + e.emoji + '</span>' + e.n + '</div>').join("") +
+    '</div></div><div class="card" id="emo-next"></div>';
+}
+function pickEmo(i){
+  regClick("siento");
+  emoSel = EMOCIONES[i]; emoNivel = "normal"; emoMotivoIdx = -1; emoCustomTxt = "";
+  speak("Me siento " + emoSel.n);
+  document.getElementById("emo-next").innerHTML =
+    '<h2>' + emoSel.emoji + ' Paso 2 · ¿Un poquito o mucho?</h2>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+    NIVELES.map(nv=>'<div class="chip" style="flex:1;padding:10px" onclick="pickNivel(\'' + nv.t + '\')" id="nv-' + nv.t + '"><span class="big">' + nv.e + '</span>' + nv.t + '</div>').join("") +
+    '</div><h2 style="margin-top:14px">Paso 3 · ¿Por qué? Toca lo que pasó</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(3,1fr)">' +
+    motivosAll().map((m,idx)=>'<div class="chip' + (m.custom?' newone':'') + '" style="padding:8px 4px" onclick="pickMotivo(' + idx + ')" id="mot-' + idx + '"><span class="big">' + m.emoji + '</span><span style="font-size:11px">' + m.t + '</span></div>').join("") +
+    '</div>' +
+    '<div class="inputrow" style="margin-top:12px"><textarea id="emo-custom" placeholder="✍️ O escribe tu propio motivo…"></textarea>' +
+    '<div style="display:flex;gap:8px;margin-top:8px">' +
+    '<button class="bigbtn" style="flex:1;background:#0ea5e9" onclick="usarCustomMotivo()">💬 Usarlo ahora</button>' +
+    '<button class="bigbtn" style="flex:1;background:#22c55e" onclick="usarCustomMotivo(true)">💾 Usarlo y guardarlo</button></div></div>' +
+    '<div id="emo-frase"></div>';
+}
+function emoMotivoTexto(){
+  if(emoMotivoIdx >= 0) return motivosAll()[emoMotivoIdx].t;
+  if(emoCustomTxt) return "porque " + emoCustomTxt;
+  return null;
+}
+function emoFrase(){
+  if(!emoSel) return "";
+  const m = emoMotivoTexto();
+  return "Me siento " + (emoNivel!=="normal" ? emoNivel + " " : "") + emoSel.n + (m ? ", " + m : "") + ".";
+}
+function pickNivel(t){
+  regClick("siento"); emoNivel = t;
+  NIVELES.forEach(nv=>{ const el=document.getElementById("nv-"+nv.t); if(el) el.classList.toggle("sel", nv.t===t); });
+  speak("Me siento " + (t!=="normal"?t+" ":"") + emoSel.n);
+  updateEmoFrase();
+}
+function pickMotivo(i){
+  regClick("siento"); emoMotivoIdx = i; emoCustomTxt = "";
+  motivosAll().forEach((m,j)=>{ const el=document.getElementById("mot-"+j); if(el) el.classList.toggle("sel", j===i); });
+  speak(emoFrase());
+  updateEmoFrase();
+}
+function usarCustomMotivo(guardar){
+  regClick("siento");
+  const v = (document.getElementById("emo-custom").value||"").trim();
+  if(!v){ toast("✍️ Escribe tu motivo primero"); return; }
+  emoCustomTxt = v; emoMotivoIdx = -1;
+  if(guardar){
+    S.customMotivos.push("porque " + v);
+    toast("💾 ¡Guardado para siempre!");
+  }
+  speak(emoFrase());
+  updateEmoFrase();
+}
+function updateEmoFrase(){
+  const el = document.getElementById("emo-frase");
+  el.innerHTML = '<div class="phrasebar" style="margin-top:12px"><span class="token">' + emoFrase() + '</span></div>' +
+    '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">' +
+    '<button class="bigbtn" style="flex:1;background:#0ea5e9" onclick="speak(emoFrase())">🔊 Escuchar</button>' +
+    '<button class="bigbtn" style="flex:1;background:#22c55e" onclick="finishSiento()">✅ ¡Lo dije!</button></div>';
+}
+function finishSiento(){
+  regOk("siento", "Expresó: " + emoFrase());
+  toast("⭐ ¡Bravo! Dijiste lo que sientes");
+}
+
+// ===== MUNDO 2: FRASES MÁGICAS (AAC) =====
+let aacIntento = null, aacObjeto = null, aacExtra = null;
+function aacHtml(){
+  aacIntento=null; aacObjeto=null; aacExtra=null;
+  return '<div class="card"><h2>Paso 1 · ¿Qué quieres decir?</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(2,1fr)">' +
+    AAC_INTENTOS.map((it,i)=>'<div class="chip" style="background:' + it.color + '33;border-color:' + it.color + '" onclick="pickIntento(' + i + ')"><span class="big">💬</span>' + it.texto + '</div>').join("") +
+    '</div><div id="aac-steps"></div></div>';
+}
+function aacFrase(){
+  let f = aacIntento ? aacIntento.texto : "";
+  if(aacObjeto) f += " " + aacObjeto.t;
+  if(aacExtra) f += " " + aacExtra.t;
+  return f ? f + "." : "";
+}
+function renderAacFrase(){
+  const el = document.getElementById("aac-frase");
+  const f = aacFrase();
+  el.innerHTML = f
+    ? '<div class="phrasebar"><span class="token">' + f + '</span></div>' +
+      '<div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">' +
+      '<button class="bigbtn" style="flex:1;background:#0ea5e9" onclick="speak(aacFrase())">🔊 Escuchar</button>' +
+      '<button class="bigbtn" style="flex:1;background:#22c55e" onclick="finishAac()">✅ ¡Lo dije!</button></div>'
+    : '<div class="phrasebar"><span class="token empty">Arma tu frase tocando las imágenes…</span></div>';
+}
+function pickIntento(i){
+  regClick("necesito");
+  aacIntento = AAC_INTENTOS[i]; aacObjeto = null; aacExtra = null;
+  speak(aacIntento.texto);
+  document.getElementById("aac-steps").innerHTML =
+    '<h2 style="margin-top:14px">Paso 2 · ¿Qué exactamente?</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(4,1fr)">' +
+    aacIntento.items.map((it,j)=>'<div class="chip" onclick="pickObjeto(' + j + ')" id="obj-' + j + '"><span class="big">' + it.e + '</span>' + it.t + '</div>').join("") +
+    '</div><h2 style="margin-top:14px">Paso 3 · ¿Algo más?</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(3,1fr)">' +
+    AAC_EXTRAS.map((ex,j)=>'<div class="chip" style="background:#f1f5f9" onclick="pickExtra(' + j + ')" id="ext-' + j + '"><span class="big">' + ex.e + '</span>' + ex.t + '</div>').join("") +
+    '</div><div id="aac-frase" style="margin-top:14px"></div>';
+  renderAacFrase();
+}
+function pickObjeto(j){
+  regClick("necesito");
+  aacObjeto = aacIntento.items[j];
+  aacIntento.items.forEach((it,k)=>{ const el=document.getElementById("obj-"+k); if(el) el.classList.toggle("sel", k===j); });
+  speak(aacIntento.texto + " " + aacObjeto.t);
+  renderAacFrase();
+}
+function pickExtra(j){
+  regClick("necesito");
+  aacExtra = AAC_EXTRAS[j];
+  AAC_EXTRAS.forEach((ex,k)=>{ const el=document.getElementById("ext-"+k); if(el) el.classList.toggle("sel", k===j); });
+  speak(aacFrase());
+  renderAacFrase();
+}
+function finishAac(){
+  if(!aacFrase()) return;
+  regOk("necesito", "Frase construida: " + aacFrase());
+  toast("⭐ ¡Frase mágica creada!");
+}
+
+// ===== MUNDO 3: MI DÍA =====
+let diaSeq = [];
+function diaHtml(){
+  diaSeq = [];
+  const acts = diaAll().filter(a=>!a.min || a.min <= S.age);
+  return '<div class="card"><h2>☀️ Toca lo que hiciste HOY, en orden</h2>' +
+    '<p style="font-size:12px;font-weight:800;color:#9a3412;margin-bottom:6px">👆 ¿Te equivocaste? Toca la palabra en tu historia y se elimina</p>' +
+    '<div id="dia-chips" class="phrasebar" style="min-height:48px;margin-bottom:10px"><span class="token empty">Tu historia aparece aquí…</span></div>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(4,1fr)">' +
+    acts.map(a=>'<div class="chip" style="padding:10px 4px" onclick="addDia(' + diaAll().indexOf(a) + ')"><span class="big">' + a.emoji + '</span><span style="font-size:10px">' + a.t + '</span></div>').join("") +
+    '</div>' +
+    '<div class="inputrow" style="margin-top:12px"><textarea id="dia-custom" placeholder="✍️ ¿Hiciste otra cosa? Escríbela aquí…"></textarea>' +
+    '<div style="display:flex;gap:8px;margin-top:8px">' +
+    '<button class="bigbtn" style="flex:1;background:#0ea5e9" onclick="usarCustomDia(false)">💬 Agregarla ahora</button>' +
+    '<button class="bigbtn" style="flex:1;background:#22c55e" onclick="usarCustomDia(true)">💾 Agregarla para siempre</button></div></div>' +
+    '<div id="dia-result"></div></div>';
+}
+function addDia(i){
+  regClick("dia");
+  const a = diaAll()[i];
+  diaSeq.push({ emoji:a.emoji, t:a.t });
+  speak(a.t);
+  renderDiaChips(); renderDiaResult();
+}
+function removeDia(j){
+  sfx.tap(); buzz(40);
+  diaSeq.splice(j,1);
+  renderDiaChips(); renderDiaResult();
+}
+function renderDiaChips(){
+  const chips = document.getElementById("dia-chips");
+  chips.innerHTML = diaSeq.length ? diaSeq.map((s,j)=>{
+    const con = j===0 ? "" : (j===diaSeq.length-1 && diaSeq.length>2 ? '<span class="token cony">Y</span>' : '<span class="token con">LUEGO</span>');
+    return con + '<span class="token" onclick="removeDia(' + j + ')">' + s.emoji + " " + s.t + '<span class="x">✕</span></span>';
+  }).join("") : '<span class="token empty">Tu historia aparece aquí…</span>';
+}
+function usarCustomDia(guardar){
+  regClick("dia");
+  const v = (document.getElementById("dia-custom").value||"").trim();
+  if(!v){ toast("✍️ Escribe tu actividad primero"); return; }
+  if(guardar){
+    S.customDia.push({ emoji:"⭐", t:v });
+    toast("💾 ¡Guardada para siempre! El dragón la leerá");
+  }
+  diaSeq.push({ emoji:"⭐", t:v });
+  speak(v);
+  renderDiaChips(); renderDiaResult();
+}
+function diaFrase(){
+  if(!diaSeq.length) return "";
+  let partes = [diaSeq[0].t];
+  for(let i=1;i<diaSeq.length;i++){
+    const con = i===diaSeq.length-1 && diaSeq.length>2 ? "y" : "luego";
+    partes.push(con + " " + diaSeq[i].t);
+  }
+  return "Hoy " + partes.join(", ") + ".";
+}
+function renderDiaResult(){
+  const el = document.getElementById("dia-result");
+  if(!diaSeq.length){ el.innerHTML=""; return; }
+  el.innerHTML = '<div style="margin-top:14px">' +
+    '<div class="phrasebar"><span class="token">' + diaFrase() + '</span></div>' +
+    '<p style="text-align:center;font-size:12px;font-weight:800;color:#9a3412;margin-top:6px">Fíjate: tus ideas se unen con LUEGO y Y 💪</p>' +
+    '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">' +
+    '<button class="bigbtn" style="flex:1;background:#0ea5e9" onclick="speak(diaFrase())">🔊 Escuchar</button>' +
+    '<button class="bigbtn" style="flex:1;background:#22c55e" onclick="finishDia()">✅ Así fue mi día</button></div></div>';
+}
+function finishDia(){
+  regOk("dia", "Contó su día (" + diaSeq.length + " acciones)");
+  toast("⭐ ¡Qué bien contaste tu día!");
+}
+
+// ===== MUNDO 4: HISTORIAS =====
+function cuentosHtml(){
+  const lista = CUENTOS.filter(c=>!c.secreta || S.totalStars>=200).filter(c=>c.min <= S.age);
+  return '<div class="card"><h2>📚 Elige una historia (' + lista.length + ')</h2>' +
+    lista.map(c=>'<div class="chip" style="flex-direction:row;padding:12px;margin-bottom:8px" onclick="openCuento(\'' + c.id + '\')">' +
+      '<span class="big">' + c.portada + '</span><span style="flex:1;text-align:left;font-size:15px">' + c.titulo + '</span><span style="font-size:11px;background:#fdf2f8;padding:2px 8px;border-radius:99px">' + c.escenas.length + ' escenas</span></div>').join("") +
+    '</div>';
+}
+let cuentoActual = null, cuentoPag = 0, cuentoFinalIdx = -1;
+const DYN_POOLS = {
+  c: ["rojo","azul","verde","amarillo","morado","anaranjado","rosa"],
+  f: ["un tesoro brillante","un cohete veloz","una pelota gigante","una torta enorme","un globo mágico","un mapa secreto"],
+  a: ["perrito","gatito","conejito","osito","pajarito","zorrito"]
+};
+let cuentoVars = {};
+function dynPrep(cuento){
+  cuentoVars = {};
+  const todo = JSON.stringify(cuento);
+  ["c","f","a"].forEach(k=>{
+    if(todo.indexOf("{" + k + "}") >= 0){
+      const pool = DYN_POOLS[k];
+      cuentoVars[k] = pool[Math.floor(Math.random()*pool.length)];
+    }
+  });
+}
+function dynTxt(t){ return String(t).replace(/\{([cfa])\}/g, function(m,k){ return cuentoVars[k] || ""; }); }
+function openCuento(id){
+  regClick("cuentos");
+  cuentoActual = CUENTOS.find(c=>c.id===id);
+  cuentoPag = 0; cuentoFinalIdx = -1;
+  dynPrep(cuentoActual);
+  renderCuentoPage();
+}
+function renderCuentoPage(){
+  const esc = cuentoActual.escenas[cuentoPag];
+  const textoEsc = dynTxt(esc.texto);
+  const last = cuentoPag === cuentoActual.escenas.length - 1;
+  let qHtml = "";
+  if(esc.q){
+    qHtml = '<div class="card" style="margin-top:12px;border:3px solid #e879f9"><h2>🤔 ' + dynTxt(esc.q.p) + '</h2>' +
+      '<div class="gridbtns">' +
+      esc.q.ops.map((op,i)=>'<button class="qopt" onclick="answerCuento(' + i + ')">' + dynTxt(op) + '</button>').join("") +
+      '</div><div id="cuento-fb"></div></div>';
+  }
+  document.getElementById("worldbody").innerHTML =
+    '<div class="card"><div style="text-align:center;font-weight:900;color:#9d174d;margin-bottom:6px">' + cuentoActual.portada + ' ' + cuentoActual.titulo + ' · ' + (cuentoPag+1) + '/' + cuentoActual.escenas.length + '</div>' +
+    '<div class="lvlbar" style="background:#fce7f3"><i style="width:' + ((cuentoPag+1)/cuentoActual.escenas.length*100) + '%;background:#d946ef"></i></div>' +
+    '<div class="scene" style="margin-top:12px">' + esc.img + '</div>' +
+    '<p class="storytext">' + textoEsc + '</p>' +
+    '<div class="storynav">' +
+    '<button class="bigbtn" style="background:#0ea5e9" onclick="speak(' + JSON.stringify(textoEsc).replace(/"/g,'&quot;') + ')">🔊 Escuchar</button>' +
+    (cuentoPag>0 ? '<button class="bigbtn" style="background:#94a3b8" onclick="cuentoPag--;renderCuentoPage()">⬅️</button>' : '') +
+    (last ? '<button class="bigbtn" style="background:#22c55e" onclick="startFinalQuiz()">🏆 ¡Terminé!</button>'
+          : '<button class="bigbtn" style="background:#d946ef" onclick="cuentoPag++;renderCuentoPage()">⏭️ Seguir</button>') +
+    '</div></div>' + qHtml;
+  setTimeout(()=>speak(textoEsc), 400);
+}
+function answerCuento(i){
+  const esc = cuentoActual.escenas[cuentoPag];
+  if(i === esc.q.c){
+    regOk("cuentos", "Comprendió: " + cuentoActual.titulo);
+    document.getElementById("cuento-fb").innerHTML = '<p class="feedback ok">🎉 ¡Correcto!</p>';
+  } else {
+    regErr("cuentos"); sfx.bad(); buzz(120);
+    document.getElementById("cuento-fb").innerHTML = '<p class="feedback bad">Casi… escucha otra vez 🤔</p>';
+    speak("Casi. Escucha otra vez");
+  }
+}
+function startFinalQuiz(){
+  regClick("cuentos");
+  cuentoFinalIdx = 0;
+  renderFinalQuiz();
+}
+function renderFinalQuiz(){
+  const qs = cuentoActual.finalQ || [];
+  if(cuentoFinalIdx >= qs.length){
+    regOk("cuentos", "Terminó el cuento: " + cuentoActual.titulo);
+    document.getElementById("worldbody").innerHTML =
+      '<div class="card" style="text-align:center;padding:40px 16px">' +
+      '<div style="font-size:70px" class="pop">🏆</div>' +
+      '<h2 style="justify-content:center;margin-top:10px">¡Terminaste la historia!</h2>' +
+      '<p style="font-weight:800;color:#64748b;margin:6px 0 16px">Cuéntaselo a papá con tus propias palabras. ¡Le encantará!</p>' +
+      '<button class="bigbtn" style="background:#d946ef;width:100%" onclick="mountWorld(\'cuentos\')">📚 Otra historia</button></div>';
+    return;
+  }
+  const q = qs[cuentoFinalIdx];
+  document.getElementById("worldbody").innerHTML =
+    '<div class="card"><h2>🎉 ¡Terminaste! Pregunta rápida ' + (cuentoFinalIdx+1) + ' de ' + qs.length + '</h2>' +
+    '<p style="font-size:19px;font-weight:900;text-align:center;margin:8px 0">' + dynTxt(q.p) + '</p>' +
+    '<div class="gridbtns">' + q.ops.map((op,i)=>'<button class="qopt" onclick="answerFinal(' + i + ')">' + dynTxt(op) + '</button>').join("") + '</div>' +
+    '<div id="final-fb"></div></div>';
+  speak(dynTxt(q.p));
+}
+function answerFinal(i){
+  const qs = cuentoActual.finalQ;
+  const q = qs[cuentoFinalIdx];
+  if(i === q.c){
+    sfx.ok(); buzz(60);
+    document.getElementById("final-fb").innerHTML = '<p class="feedback ok">🎉 ¡Correcto!</p>';
+    setTimeout(()=>{ cuentoFinalIdx++; renderFinalQuiz(); }, 1200);
+  } else {
+    regErr("cuentos"); sfx.bad();
+    document.getElementById("final-fb").innerHTML = '<p class="feedback bad">Casi… 🤔</p>';
+  }
+}
+
+// ===== MUNDO 5: PALABRAS MÁGICAS =====
+let puenteNivel = 0, puenteRacha = 0;
+function puenteHtml(){
+  if(puenteNivel >= PUENTE.length) puenteNivel = 0;
+  const ej = PUENTE[puenteNivel];
+  return '<div class="card"><h2>⭐ ¿Qué palabra une estas ideas?</h2>' +
+    '<p style="text-align:center;font-size:19px;font-weight:900;margin:10px 4px">' + ej.a + ' <span style="color:#7c3aed">____</span> ' + ej.b + '</p>' +
+    '<p style="text-align:center;font-size:11px;font-weight:800;color:#64748b">Ejercicio ' + (puenteNivel+1) + ' de ' + PUENTE.length + (puenteRacha>0?' · 🔥 Racha: '+puenteRacha:'') + '</p>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(2,1fr);margin-top:10px">' +
+    CONECTORES_INFO.map(c=>'<button class="qopt" style="background:#ede9fe;color:#5b21b6;border-color:#c4b5fd" onclick="answerPuente(\'' + c.p + '\')">' + c.e + ' ' + c.p + '</button>').join("") +
+    '</div><div id="puente-fb" style="margin-top:8px"></div></div>' +
+    '<div class="card"><h2>📖 ¿Qué hace cada palabra?</h2>' +
+    CONECTORES_INFO.map(c=>'<div class="unlockrow"><span style="font-size:20px">' + c.e + '</span><b style="color:#6d28d9">' + c.p + '</b><span style="font-size:12px;color:#64748b">' + c.u + '</span></div>').join("") + '</div>';
+}
+function answerPuente(op){
+  const ej = PUENTE[puenteNivel];
+  const fb = document.getElementById("puente-fb");
+  if(op === ej.c){
+    puenteRacha++;
+    regOk("puente", "Palabra mágica: " + ej.c);
+    fb.innerHTML = '<p class="feedback ok">🎉 ' + ej.a + ' <b>' + ej.c + '</b> ' + ej.b + '.</p>';
+    speak(ej.a + " " + ej.c + " " + ej.b);
+    setTimeout(()=>{ puenteNivel++; if(document.getElementById("worldbody")) mountWorld("puente"); }, 1900);
+  } else {
+    puenteRacha = 0;
+    regErr("puente"); sfx.bad(); buzz(120);
+    fb.innerHTML = '<p class="feedback bad">Mmm… esa no une bien. ¡Prueba otra! 🤔</p>';
+  }
+}
+
+// ===== MUNDO 6: MATEMÁTICAS =====
+let mateTab = "cuentas", mateNivel = 10, mateOp = "+", mateQ = null, mateStreak = 0;
+function mateHtml(){
+  return '<div class="tabbtns">' +
+    '<button class="' + (mateTab==="cuentas"?"sel":"") + '" onclick="mateTab=\'cuentas\';mountWorld(\'mate\')">➕ Sumas y Restas</button>' +
+    '<button class="' + (mateTab==="multi"?"sel":"") + '" onclick="mateTab=\'multi\';mountWorld(\'mate\')">✖️ Multiplicar</button>' +
+    '<button class="' + (mateTab==="prob"?"sel":"") + '" onclick="mateTab=\'prob\';mountWorld(\'mate\')">🧩 Problemas</button>' +
+    '<button class="' + (mateTab==="calc"?"sel":"") + '" onclick="mateTab=\'calc\';mountWorld(\'mate\')">🧮 Calculadora</button>' +
+    '</div>' +
+    (mateTab==="cuentas" ? mateCuentasHtml() : mateTab==="multi" ? mateMultiHtml() : mateTab==="prob" ? mateProbHtml() : mateCalcHtml());
+}
+function mateCuentasHtml(){
+  if(!mateQ) mateGenQ();
+  return '<div class="card"><h2>➕➖ Elige tu nivel</h2>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+    [10,100,1000].map(n=>'<button class="qopt" style="' + (mateNivel===n?'background:#2563eb;color:#fff;':'') + 'width:auto;padding:10px 18px" onclick="mateNivel=' + n + ';mateGenQ();mountWorld(\'mate\')">1 al ' + n + '</button>').join("") +
+    '<button class="qopt" style="' + (mateOp==='+'?'background:#22c55e;color:#fff;':'') + 'width:auto;padding:10px 18px" onclick="mateOp=\'+\';mateGenQ();mountWorld(\'mate\')">➕ Sumar</button>' +
+    '<button class="qopt" style="' + (mateOp==='-'?'background:#ef4444;color:#fff;':'') + 'width:auto;padding:10px 18px" onclick="mateOp=\'-\';mateGenQ();mountWorld(\'mate\')">➖ Restar</button>' +
+    '</div>' +
+    '<div class="mathprob">' + mateQ.a + " " + mateOp + " " + mateQ.b + " = ?</div>" +
+    '<div class="gridbtns" style="grid-template-columns:repeat(2,1fr)">' +
+    mateQ.ops.map((o,i)=>'<button class="qopt" style="font-size:24px;text-align:center" onclick="mateAnswer(' + i + ')">' + o + '</button>').join("") +
+    '</div><div id="mate-fb"></div>' +
+    '<p style="text-align:center;font-size:12px;font-weight:800;color:#64748b">🔥 Racha: ' + mateStreak + '</p></div>';
+}
+function mateGenQ(){
+  let a, b;
+  if(mateNivel===10){ a = 1+Math.floor(Math.random()*9); b = 1+Math.floor(Math.random()*9); }
+  else if(mateNivel===100){ a = 10+Math.floor(Math.random()*89); b = 1+Math.floor(Math.random()*89); }
+  else { a = 100+Math.floor(Math.random()*899); b = 10+Math.floor(Math.random()*899); }
+  if(mateOp==="-" && b>a){ const tmp=a; a=b; b=tmp; }
+  const res = mateOp==="+" ? a+b : a-b;
+  const distract = res + (Math.random()<0.5 ? 1 : -1) * (1+Math.floor(Math.random()*3));
+  const ops = Math.random()<0.5 ? [res, distract] : [distract, res];
+  mateQ = { a:a, b:b, res:res, ops:ops, c: ops.indexOf(res) };
+}
+function mateAnswer(i){
+  regClick("mate");
+  const fb = document.getElementById("mate-fb");
+  if(i === mateQ.c){
+    mateStreak++; regOk("mate", "Resolvió: " + mateQ.a + mateOp + mateQ.b);
+    fb.innerHTML = '<p class="feedback ok">🎉 ¡Correcto! ' + mateQ.a + " " + mateOp + " " + mateQ.b + ' = ' + mateQ.res + '</p>';
+    speak("¡Correcto! ¡Muy bien!");
+    setTimeout(()=>{ mateGenQ(); if(document.getElementById("worldbody")) mountWorld("mate"); }, 1600);
+  } else {
+    mateStreak = 0; regErr("mate"); sfx.bad(); buzz(120);
+    fb.innerHTML = '<p class="feedback bad">Casi… ¡inténtalo otra vez! 🤔</p>';
+  }
+}
+function mateMultiHtml(){
+  return '<div class="card"><h2>✖️ Multiplicar es agrupar</h2>' +
+    '<p style="font-size:13px;font-weight:800;color:#64748b;margin-bottom:8px">Ejemplo: 3 × 2 son 3 grupos de 2</p>' +
+    [1,2,3,4,5,6,7,8,9,10,11,12].map(m=>'<button class="qopt" style="margin-bottom:8px" onclick="mateMultiStart(' + m + ')">Tabla del ' + m + ' 🌟</button>').join("") +
+    '</div><div class="card" id="multi-area"><h2>👆 Elige una tabla</h2></div>';
+}
+let multiTabla = 0, multiIdx = 0;
+function mateMultiStart(m){
+  regClick("mate"); multiTabla = m; multiIdx = 1;
+  renderMulti();
+}
+function renderMulti(){
+  const a = multiTabla, b = multiIdx;
+  const res = a*b;
+  const grupos = Array(b).fill('<span style="font-size:26px">' + "⭐".repeat(Math.min(a,5)) + '</span>').join(" ");
+  document.getElementById("multi-area").innerHTML =
+    '<h2>Tabla del ' + a + ' · ' + b + ' de ' + 12 + '</h2>' +
+    '<p style="text-align:center;font-size:14px;font-weight:800;color:#64748b">' + grupos + '</p>' +
+    '<div class="mathprob">' + a + ' × ' + b + ' = ?</div>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(2,1fr)">' +
+    [res, res+a, res-a>0?res-a:res+a+1].filter((v,i,arr)=>arr.indexOf(v)===i).sort(()=>Math.random()-0.5).map(o=>'<button class="qopt" style="font-size:24px" onclick="mateMultiAnswer(' + o + ')">' + o + '</button>').join("") +
+    '</div><div id="multi-fb"></div>';
+}
+function mateMultiAnswer(o){
+  regClick("mate");
+  const res = multiTabla * multiIdx;
+  const fb = document.getElementById("multi-fb");
+  if(o === res){
+    regOk("mate", "Multiplicó: " + multiTabla + "×" + multiIdx);
+    fb.innerHTML = '<p class="feedback ok">🎉 ¡Correcto! ' + multiTabla + ' × ' + multiIdx + ' = ' + res + '</p>';
+    speak("¡Correcto! ¡Muy bien!");
+    setTimeout(()=>{ if(multiIdx<12){ multiIdx++; renderMulti(); } else { toast("🏆 ¡Tabla completada!"); mountWorld("mate"); } }, 1500);
+  } else {
+    regErr("mate"); sfx.bad();
+    fb.innerHTML = '<p class="feedback bad">Casi… cuenta los grupos 🤔</p>';
+  }
+}
+function mateProbHtml(){
+  const idx = Math.floor(Math.random()*PROBLEMAS.length);
+  const p = PROBLEMAS[idx];
+  return '<div class="card"><h2>🧩 Problemas para campeones</h2>' +
+    '<div class="scene" style="font-size:48px">' + p.e + '</div>' +
+    '<p style="font-size:17px;font-weight:900;text-align:center;line-height:1.5;margin-bottom:12px">' + p.p + '</p>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(2,1fr)">' +
+    p.ops.map((o,i)=>'<button class="qopt" style="font-size:24px" onclick="probAnswer(' + i + ',' + idx + ')">' + o + '</button>').join("") +
+    '</div><div id="prob-fb"></div></div>';
+}
+function probAnswer(i, idx){
+  regClick("mate");
+  const p = PROBLEMAS[idx];
+  const fb = document.getElementById("prob-fb");
+  if(i === p.c){
+    regOk("mate", "Problema resuelto");
+    fb.innerHTML = '<p class="feedback ok">🎉 ¡Eres un campeón!</p>';
+    speak("¡Correcto!");
+    setTimeout(()=>{ if(document.getElementById("worldbody")) mountWorld("mate"); }, 1600);
+  } else {
+    regErr("mate"); sfx.bad();
+    fb.innerHTML = '<p class="feedback bad">Casi… piénsalo otra vez 🤔</p>';
+  }
+}
+let calcA = "", calcOp = "", calcB = "", calcRes = null;
+function mateCalcHtml(){
+  calcA=""; calcOp=""; calcB=""; calcRes=null;
+  return '<div class="card"><h2>🧮 Mi calculadora</h2>' +
+    '<div class="calcdisp" id="calcdisp">0</div>' +
+    '<div class="calcgrid">' +
+    ["7","8","9","÷","4","5","6","×","1","2","3","−","C","0","⌫","+"].map(k=>{
+      const cls = "÷×−+".includes(k) ? "op" : "";
+      const act = "÷×−+".includes(k) ? 'calcSetOp(\'' + (k==="÷"?"/":k==="×"?"*":k==="−"?"-":"+") + '\')' :
+        k==="C" ? 'calcClear()' : k==="⌫" ? 'calcBack()' : 'calcNum(\'' + k + '\')';
+      return '<button class="' + cls + '" onclick="' + act + '">' + k + '</button>';
+    }).join("") +
+    '<button class="eq" style="grid-column:span 4;font-size:22px" onclick="calcEq()">= ¡Cuéntalo! 🔊</button>' +
+    '</div></div>';
+}
+function calcRender(){
+  const d = document.getElementById("calcdisp");
+  let txt = calcA || "0";
+  if(calcOp) txt += " " + (calcOp==="*"?"×":calcOp==="/"?"÷":calcOp) + " ";
+  if(calcB) txt += calcB;
+  if(calcRes !== null) txt += " = " + calcRes;
+  d.textContent = txt;
+}
+function calcNum(n){ if(calcRes!==null){calcA=String(calcRes);calcOp="";calcB="";calcRes=null;} if(!calcOp){calcA+=n;} else {calcB+=n;} calcRender(); sfx.tap(); }
+function calcSetOp(o){ if(calcA){ calcOp=o; calcRes=null; } calcRender(); sfx.tap(); }
+function calcClear(){ calcA="";calcOp="";calcB="";calcRes=null; calcRender(); sfx.tap(); }
+function calcBack(){ if(calcB){calcB=calcB.slice(0,-1);} else if(calcOp){calcOp="";} else {calcA=calcA.slice(0,-1);} calcRender(); sfx.tap(); }
+function calcEq(){
+  if(!calcA || !calcOp || !calcB) return;
+  const a = parseFloat(calcA), b = parseFloat(calcB);
+  let r;
+  if(calcOp==="+") r = a+b;
+  if(calcOp==="-") r = a-b;
+  if(calcOp==="*") r = a*b;
+  if(calcOp==="/") r = b!==0 ? +(a/b).toFixed(2) : 0;
+  calcRes = r;
+  calcRender();
+  const opName = calcOp==="+"?"más":calcOp==="-"?"menos":calcOp==="*"?"por":"dividido entre";
+  speak(a + " " + opName + " " + b + " es igual a... " + r);
+  regClick("mate");
+  toast("🧮 ¡Calculado!");
+}
+
+// ===== MUNDO 7: INGLÉS =====
+let engTab = "vocab", engCat = 0;
+function englishHtml(){
+  return '<div class="tabbtns" style="flex-wrap:wrap;justify-content:center">' +
+    '<button class="' + (engTab==="vocab"?"sel":"") + '" onclick="engTab=\'vocab\';mountWorld(\'english\')">📚 Palabras</button>' +
+    '<button class="' + (engTab==="frases"?"sel":"") + '" onclick="engTab=\'frases\';mountWorld(\'english\')">💬 Frases</button>' +
+    '<button class="' + (engTab==="numeros"?"sel":"") + '" onclick="engTab=\'numeros\';mountWorld(\'english\')">🔢 Números 1–100</button>' +
+    '<button class="' + (engTab==="grandes"?"sel":"") + '" onclick="engTab=\'grandes\';mountWorld(\'english\')">🚀 Gigantes</button>' +
+    '<button class="' + (engTab==="escribir"?"sel":"") + '" onclick="engTab=\'escribir\';mountWorld(\'english\')">⌨️ Escribe y escucha</button>' +
+    '<button class="' + (engTab==="traducir"?"sel":"") + '" onclick="engTab=\'traducir\';mountWorld(\'english\')">🔁 Traductor</button>' +
+    '<button class="' + (engTab==="quiz"?"sel":"") + '" onclick="engTab=\'quiz\';mountWorld(\'english\')">🎮 Juego</button>' +
+    '</div>' +
+    (engTab==="vocab" ? engVocabHtml() : engTab==="frases" ? engFrasesHtml() : engTab==="numeros" ? engNumerosHtml() : engTab==="grandes" ? engGrandesHtml() : engTab==="escribir" ? engEscribirHtml() : engTab==="traducir" ? engTraducirHtml() : engQuizHtml());
+}
+function engVocabHtml(){
+  return '<div class="card"><h2>📚 Toca y escucha en inglés 🇬🇧</h2>' +
+    '<div class="tabbtns">' + ENG_VOCAB.map((c,i)=>'<button class="' + (engCat===i?"sel":"") + '" onclick="engCat=' + i + ';mountWorld(\'english\')">' + c.cat + '</button>').join("") + '</div>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(3,1fr)">' +
+    ENG_VOCAB[engCat].items.map(v=>'<div class="chip engword" onclick="speak(\'' + v.en + '\',\'en-US\');regClick(\'english\')"><span class="big">' + v.e + '</span><span class="en">' + v.en + '</span><span class="es">' + v.es + '</span></div>').join("") +
+    '</div></div>';
+}
+function engFrasesHtml(){
+  return '<div class="card"><h2>💬 Frases útiles · toca para escuchar</h2>' +
+    '<div class="gridbtns">' +
+    ENG_FRASES.map(f=>'<div class="chip" style="flex-direction:row;text-align:left" onclick="speak(\'' + f.en.replace(/'/g,"\\'") + '\',\'en-US\');regClick(\'english\')">' +
+      '<span class="big">' + f.e + '</span><span style="flex:1"><span class="en" style="font-weight:900;color:#0e7490;display:block">' + f.en + '</span><span style="font-size:12px;color:#64748b">' + f.es + '</span></span></div>').join("") +
+    '</div></div>';
+}
+const EN_UNIDADES = ["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen"];
+const EN_DECENAS = ["","","twenty","thirty","forty","fifty","sixty","seventy","eighty","ninety"];
+function numToEn(n){
+  n = parseInt(n,10);
+  if(isNaN(n) || n<0 || n>1000000) return null;
+  if(n===1000000) return "one million";
+  function sub999(x){
+    if(x===0) return "";
+    if(x<20) return EN_UNIDADES[x];
+    if(x<100) return EN_DECENAS[Math.floor(x/10)] + (x%10 ? "-" + EN_UNIDADES[x%10] : "");
+    const h = Math.floor(x/100), r = x%100;
+    return EN_UNIDADES[h] + " hundred" + (r ? " " + sub999(r) : "");
+  }
+  if(n<1000) return sub999(n) || "zero";
+  const th = Math.floor(n/1000), r = n%1000;
+  return (th===1 ? "one thousand" : sub999(th) + " thousand") + (r ? " " + sub999(r) : "");
+}
+function engNumerosHtml(){
+  let chips = "";
+  for(let i=1;i<=100;i++){
+    chips += '<div class="chip" style="padding:8px 4px" onclick="speak(\'' + numToEn(i) + '\',\'en-US\');regClick(\'english\')"><span class="big">' + i + '</span><span class="en">' + numToEn(i) + '</span></div>';
+  }
+  return '<div class="card"><h2>🔢 Números del 1 al 100 · toca y escucha</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(4,1fr)">' + chips + '</div></div>';
+}
+function engGrandesHtml(){
+  const grandes = [
+    { v:100, e:"💯" }, { v:1000, e:"🌟" }, { v:10000, e:"🚀" }, { v:100000, e:"🌌" }, { v:1000000, e:"🐉" } ];
+  return '<div class="card"><h2>🚀 Números gigantes · toca y escucha</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(1,1fr)">' +
+    grandes.map(g=>'<div class="chip" style="flex-direction:row;text-align:left;padding:12px" onclick="speak(\'' + numToEn(g.v) + '\',\'en-US\');regClick(\'english\')">' +
+      '<span class="big">' + g.e + '</span><span style="flex:1"><span style="font-size:22px;font-weight:900;display:block">' + g.v.toLocaleString("en-US") + '</span><span class="en">' + numToEn(g.v) + '</span></span></div>').join("") +
+    '</div></div>';
+}
+function engEscribirHtml(){
+  return '<div class="card"><h2>⌨️ Escribe cualquier número · la voz lo dice en inglés</h2>' +
+    '<div class="scene" style="font-size:40px" id="escribir-emoji">🎧</div>' +
+    '<div class="inputrow" style="margin:10px 0"><input id="escribir-num" type="number" inputmode="numeric" placeholder="Ej: 42 o 5000" style="font-size:20px;font-weight:900;text-align:center"></div>' +
+    '<button class="bigbtn" style="background:#0ea5e9;width:100%" onclick="engSpeakNum()">🔊 ¡Escúchalo!</button>' +
+    '<p style="font-size:14px;font-weight:900;margin-top:10px" id="escribir-out"></p></div>';
+}
+function engSpeakNum(){
+  regClick("english");
+  const v = document.getElementById("escribir-num").value;
+  const en = numToEn(v);
+  const out = document.getElementById("escribir-out");
+  if(en){ out.innerHTML = "🗣️ " + en; speak(en, "en-US"); }
+  else { out.innerHTML = "🤔 Escribe un número del 0 al 1 000 000"; }
+}
+
+// ----- TRADUCTOR CON TOLERANCIA FONÉTICA INFANTIL -----
+let ENG_DICT = null, ENG_PHON = null;
+const DICT_EXTRA =
+  "árbol:tree,flor:flower,hoja:leaf,raíz:root,semilla:seed,cebolla:onion," +
+  "tiburón:shark,ballena:whale,pulpo:octopus,cangrejo:crab,tortuga:turtle,delfín:dolphin," +
+  "mono:monkey,gorila:gorilla,cebra:zebra,jirafa:giraffe,cocodrilo:crocodile," +
+  "oveja:sheep,cabra:goat,cerdo:pig,vaca:cow,toro:bull,burro:donkey,ratón:mouse," +
+  "ardilla:squirrel,zorro:fox,lobo:wolf,león:lion,hormiga:ant,araña:spider," +
+  "guitarra:guitar,teléfono:phone,música:music,escuela:school,libro:book,lápiz:pencil," +
+  "avión:airplane,helicóptero:helicopter,ala:wing,aeropuerto:airport,barco:ship,tren:train";
+
+function normChildKey(s){
+  return String(s||"").toLowerCase().trim()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/gui/g,"gi").replace(/gue/g,"ge")
+    .replace(/v/g,"b").replace(/[zsc]/g,"s")
+    .replace(/ll/g,"y").replace(/h/g,"");
+}
+function buildEngDict(){
+  if(ENG_DICT) return;
+  ENG_DICT = {}; ENG_PHON = {};
+  ENG_VOCAB.forEach(c=>c.items.forEach(it=>{
+    ENG_DICT[it.es.toLowerCase()] = { en:it.en, es:it.es, e:it.e };
+    ENG_PHON[normChildKey(it.es)] = { en:it.en, es:it.es, e:it.e };
+  }));
+  ENG_FRASES.forEach(f=>{
+    const cleanEs = f.es.toLowerCase().replace(/[¡!¿?]/g,"").trim();
+    ENG_DICT[cleanEs] = { en:f.en, es:f.es, e:f.e };
+    ENG_PHON[normChildKey(cleanEs)] = { en:f.en, es:f.es, e:f.e };
+  });
+  DICT_EXTRA.split(",").forEach(pair=>{
+    const p = pair.split(":");
+    if(p.length===2){
+      const es = p[0].trim(), en = p[1].trim();
+      ENG_DICT[es.toLowerCase()] = { en:en, es:es, e:"🌟" };
+      ENG_PHON[normChildKey(es)] = { en:en, es:es, e:"🌟" };
+    }
+  });
+}
+function engTraducirHtml(){
+  buildEngDict();
+  return '<div class="card"><h2>🔁 Traductor Mágico Español → Inglés</h2>' +
+    '<p style="font-size:12px;font-weight:800;color:#64748b;margin-bottom:8px">Escribe una palabra en español (como "perro", "guitarra" o "teléfono"). ¡Se amolda si te falta una tilde o letra!</p>' +
+    '<div class="inputrow"><input id="trad-inp" placeholder="Escribe en español…" oninput="engTraducirRun()"></div>' +
+    '<div id="trad-out" style="margin-top:12px"></div></div>';
+}
+function engTraducirRun(){
+  buildEngDict();
+  const raw = (document.getElementById("trad-inp").value||"").trim();
+  const out = document.getElementById("trad-out");
+  if(!raw){ out.innerHTML=""; return; }
+  const low = raw.toLowerCase();
+  const hit = ENG_DICT[low] || ENG_PHON[normChildKey(low)];
+  if(hit){
+    const note = (low !== hit.es.toLowerCase()) ? '<small style="display:block;color:#16a34a;margin-top:4px">✨ Bien escrito en español: <b>' + hit.es + '</b></small>' : '';
+    out.innerHTML = '<div class="chip" style="padding:16px" onclick="speak(\'' + hit.en.replace(/'/g,"\\'") + '\',\'en-US\')">' +
+      '<span class="big">' + hit.e + '</span>' +
+      '<b style="font-size:22px;color:#0e7490">' + hit.en + '</b>' +
+      '<span style="font-size:13px;color:#64748b">' + hit.es + ' (toca para escuchar 🔊)</span>' + note + '</div>';
+  } else {
+    out.innerHTML = '<p style="font-weight:800;color:#64748b;text-align:center">Prueba con palabras como: perro, gato, guitarra, teléfono, árbol, sol, feliz…</p>';
+  }
+}
+let engQuizItem = null, engQuizOps = [];
+function engQuizHtml(){
+  const all = [];
+  ENG_VOCAB.forEach(c=>c.items.forEach(it=>all.push(it)));
+  engQuizItem = all[Math.floor(Math.random()*all.length)];
+  const others = all.filter(x=>x.en!==engQuizItem.en).sort(()=>Math.random()-0.5).slice(0,3);
+  engQuizOps = [engQuizItem].concat(others).sort(()=>Math.random()-0.5);
+  setTimeout(()=>speak(engQuizItem.en, "en-US"), 250);
+  return '<div class="card"><h2>🎮 ¿Qué significa "' + engQuizItem.en + '"?</h2>' +
+    '<div style="text-align:center;margin:8px 0"><button class="bigbtn" style="background:#0ea5e9" onclick="speak(\'' + engQuizItem.en + '\',\'en-US\')">🔊 Escuchar "' + engQuizItem.en + '"</button></div>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(2,1fr);margin-top:10px">' +
+    engQuizOps.map((o,i)=>'<div class="chip" onclick="engQuizAns(' + i + ')"><span class="big">' + o.e + '</span>' + o.es + '</div>').join("") +
+    '</div><div id="engq-fb"></div></div>';
+}
+function engQuizAns(i){
+  regClick("english");
+  const picked = engQuizOps[i];
+  const fb = document.getElementById("engq-fb");
+  if(picked.en === engQuizItem.en){
+    regOk("english", "Inglés: " + engQuizItem.en);
+    fb.innerHTML = '<p class="feedback ok">🎉 ¡Yes! ' + engQuizItem.en + ' = ' + engQuizItem.es + '</p>';
+    speak("Great job!", "en-US");
+    setTimeout(()=>{ if(document.getElementById("worldbody")) mountWorld("english"); }, 1400);
+  } else {
+    regErr("english"); sfx.bad();
+    fb.innerHTML = '<p class="feedback bad">Try again! 🤔</p>';
+  }
+}
+
+// ===== MUNDO 8: CREAR HISTORIAS =====
+let crSel = { quien:null, donde:null, que:null, final:null };
+function crearHtml(){
+  crSel = { quien:null, donde:null, que:null, final:null };
+  return '<div class="card"><h2>✍️ Paso 1 · ¿Quién es el protagonista?</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(4,1fr)">' +
+    HISTORIA_PARTES.quien.map((x,i)=>'<div class="chip" id="cr-quien-' + i + '" onclick="pickCr(\'quien\',' + i + ')"><span class="big">' + x.e + '</span><span style="font-size:11px">' + x.t + '</span></div>').join("") +
+    '</div></div>' +
+    '<div class="card"><h2>🌍 Paso 2 · ¿Dónde ocurre?</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(3,1fr)">' +
+    HISTORIA_PARTES.donde.map((x,i)=>'<div class="chip" id="cr-donde-' + i + '" onclick="pickCr(\'donde\',' + i + ')"><span class="big">' + x.e + '</span><span style="font-size:11px">' + x.t + '</span></div>').join("") +
+    '</div></div>' +
+    '<div class="card"><h2>⚡ Paso 3 · ¿Qué pasó?</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(3,1fr)">' +
+    HISTORIA_PARTES.que.map((x,i)=>'<div class="chip" id="cr-que-' + i + '" onclick="pickCr(\'que\',' + i + ')"><span class="big">' + x.e + '</span><span style="font-size:11px">' + x.t + '</span></div>').join("") +
+    '</div></div>' +
+    '<div class="card"><h2>🎉 Paso 4 · ¿Cómo termina?</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(2,1fr)">' +
+    HISTORIA_PARTES.final.map((x,i)=>'<div class="chip" id="cr-final-' + i + '" onclick="pickCr(\'final\',' + i + ')"><span class="big">' + x.e + '</span><span style="font-size:11px">' + x.t + '</span></div>').join("") +
+    '</div><div id="cr-out" style="margin-top:14px"></div></div>';
+}
+function pickCr(k, i){
+  regClick("crear");
+  crSel[k] = HISTORIA_PARTES[k][i];
+  HISTORIA_PARTES[k].forEach((_,j)=>{
+    const el = document.getElementById("cr-" + k + "-" + j);
+    if(el) el.classList.toggle("sel", j===i);
+  });
+  speak(crSel[k].t);
+  renderCrStory();
+}
+function crTexto(){
+  if(!crSel.quien || !crSel.donde || !crSel.que || !crSel.final) return "";
+  return "Había una vez " + crSel.quien.t + " que vivía " + crSel.donde.t + ". Un día " + crSel.que.t + ", " + crSel.final.t + ".";
+}
+function renderCrStory(){
+  const out = document.getElementById("cr-out");
+  const t = crTexto();
+  if(!t){ out.innerHTML = '<div class="phrasebar"><span class="token empty">Elige las 4 partes para escuchar tu cuento…</span></div>'; return; }
+  out.innerHTML = '<div class="scene">' + crSel.quien.e + crSel.donde.e + crSel.que.e + crSel.final.e + '</div>' +
+    '<p class="storytext">' + t + '</p>' +
+    '<div style="display:flex;gap:8px;margin-top:12px">' +
+    '<button class="bigbtn" style="flex:1;background:#0ea5e9" onclick="speak(crTexto())">🔊 Escuchar cuento</button>' +
+    '<button class="bigbtn" style="flex:1;background:#22c55e" onclick="regOk(\'crear\',\'Cuento inventado\');toast(\'⭐ ¡Gran escritor!\')">✅ ¡Me encanta!</button></div>';
+}
+
+// ===== MUNDO 9: PIZARRA MÁGICA MULTICOLOR =====
+let pizColor = "#ef4444", pizSize = 8;
+const PIZ_COLORS = ["#ef4444","#f97316","#eab308","#22c55e","#0ea5e9","#6366f1","#a855f7","#ec4899","#1e293b","#ffffff"];
+function dibujarHtml(){
+  return '<div class="card"><h2>🎨 Pizarra Mágica · elige tu color y dibuja</h2>' +
+    '<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:10px">' +
+    PIZ_COLORS.map(c=>'<button onclick="setPizColor(\'' + c + '\')" style="width:36px;height:36px;border-radius:50%;background:' + c + ';border:3px solid ' + (pizColor===c?'#0f172a':'#cbd5e1') + ';cursor:pointer"></button>').join("") +
+    '<button class="qopt" style="width:auto;padding:6px 14px" onclick="pizSize=6">✏️ Fino</button>' +
+    '<button class="qopt" style="width:auto;padding:6px 14px" onclick="pizSize=16">🖌️ Grueso</button>' +
+    '</div>' +
+    '<div style="text-align:center"><canvas id="piz-canvas" width="680" height="360" style="width:100%;max-width:680px;background:#ffffff;border:4px solid #a855f7;border-radius:20px;touch-action:none;cursor:crosshair"></canvas></div>' +
+    '<div style="display:flex;gap:8px;margin-top:12px">' +
+    '<button class="bigbtn" style="flex:1;background:#f97316" onclick="clearPizarra()">🧽 Borrar todo</button>' +
+    '<button class="bigbtn" style="flex:1;background:#22c55e" onclick="regOk(\'dibujar\',\'Hizo un dibujo mágico\');toast(\'🎨 ¡Qué obra de arte!\')">🌟 ¡Terminé mi dibujo!</button>' +
+    '</div></div>';
+}
+function setPizColor(c){ pizColor = c; sfx.tap(); }
+function initPizarra(){
+  const cvs = document.getElementById("piz-canvas");
+  if(!cvs) return;
+  const ctx = cvs.getContext("2d");
+  let drawing = false;
+  function getPos(e){
+    const r = cvs.getBoundingClientRect();
+    const scaleX = cvs.width / r.width;
+    const scaleY = cvs.height / r.height;
+    return { x: (e.clientX - r.left) * scaleX, y: (e.clientY - r.top) * scaleY };
+  }
+  cvs.onpointerdown = function(e){
+    drawing = true;
+    const p = getPos(e);
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+  };
+  cvs.onpointermove = function(e){
+    if(!drawing) return;
+    const p = getPos(e);
+    ctx.lineWidth = pizSize;
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    ctx.strokeStyle = pizColor;
+    ctx.lineTo(p.x, p.y);
+    ctx.stroke();
+  };
+  window.addEventListener("pointerup", function(){ drawing = false; });
+}
+function clearPizarra(){
+  const cvs = document.getElementById("piz-canvas");
+  if(cvs) cvs.getContext("2d").clearRect(0,0,cvs.width,cvs.height);
+  sfx.tap();
+}
+
+// ===== MUNDO 10: JUEGOS ARCADE (LOS 7 MINIJUEGOS COMPLETOS) =====
+let juegoTab = "merge";
+const JUEGOS_LIST = [
+  { id:"merge",    e:"🔢", n:"Mates Merge",        d:"Une números con el dedo" },
+  { id:"sonido",   e:"🔤", n:"Sonido Inicial",     d:"Sílabas y palabras" },
+  { id:"cazador",  e:"🎈", n:"Cazador de Sumas",   d:"Toca el globo" },
+  { id:"torre",    e:"🏗️", n:"Torre de Mates",     d:"Apila pisos" },
+  { id:"lluvia",   e:"🌧️", n:"Lluvia de Palabras", d:"Atrapa las que caen" },
+  { id:"memo",     e:"🃏", n:"Memorama",           d:"Encuentra los pares" },
+  { id:"burbujas", e:"🫧", n:"Burbujas que Suman", d:"Elige el número correcto" }
+];
+function juegosHtml(){
+  return '<div class="card"><h2>🕹️ ¡Elige tu juego!</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(auto-fit,minmax(125px,1fr))">' +
+    JUEGOS_LIST.map(j=>'<div class="chip ' + (juegoTab===j.id?'sel':'') + '" onclick="selectJuego(\'' + j.id + '\')"><span class="big">' + j.e + '</span><b>' + j.n + '</b><small style="font-size:10px;color:#64748b">' + j.d + '</small></div>').join("") +
+    '</div></div><div id="juego-stage"></div>';
+}
+function selectJuego(id){
+  sfx.tap(); llStop(); csStop();
+  juegoTab = id;
+  mountWorld("juegos");
+}
+function mountJuegoActivo(){
+  const st = document.getElementById("juego-stage");
+  if(!st) return;
+  if(juegoTab==="merge") renderMatesMerge(st);
+  if(juegoTab==="sonido") renderSonidoInicial(st);
+  if(juegoTab==="cazador") renderCazadorSumas(st);
+  if(juegoTab==="torre") renderTorreMates(st);
+  if(juegoTab==="lluvia") renderLluviaPalabras(st);
+  if(juegoTab==="memo") renderMemorama(st);
+  if(juegoTab==="burbujas") renderBurbujas(st);
+}
+
+// ----- JUEGO 1: MATES MERGE 3D (ESTILO 2248 FIEL AL VIDEO) -----
+const MM_COLS = 5, MM_ROWS = 8;
+const MM_COLORS = { 2:"#27ae60", 4:"#2980b9", 8:"#d35400", 16:"#c2185b", 32:"#7b1fa2", 64:"#7f1d1d", 128:"#512da8", 256:"#1f618d", 512:"#0e7490", 1024:"#b45309", 2048:"#be123c", 4096:"#9d174d", 8192:"#4338ca" };
+let mmBoard = [], mmChain = [], mmDragging = false, mmScore = 0, mmRecord = 64, mmSmash = false;
+
+function mmRandVal(){
+  const pool = [2, 4, 8, 16];
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+function renderMatesMerge(container){
+  if(!mmBoard.length){
+    for(let r=0;r<MM_ROWS;r++){
+      const row = [];
+      for(let c=0;c<MM_COLS;c++) row.push(mmRandVal());
+      mmBoard.push(row);
+    }
+  }
+  container.innerHTML = '<div class="card" style="background:#0d152c;color:#fff;border-color:#25386b">' +
+    '<h2 style="color:#fff;justify-content:center">🔢 Mates Merge · une números con el dedo</h2>' +
+    '<div class="mm-hud">' +
+      '<div class="mm-pill">⭐ Estrellas: <span id="mm-stars">' + S.stars + '</span></div>' +
+      '<div class="mm-score" id="mm-score">' + mmScore + '</div>' +
+      '<div class="mm-pill">👑 Récord: <span id="mm-rec">' + mmRecord + '</span></div>' +
+    '</div>' +
+    '<div class="mm-goalbar">' +
+      '<div class="mm-goalline"></div>' +
+      '<div class="mm-minitile val2">2</div>' +
+      '<div class="mm-minitile center val' + Math.min(8192,mmRecord) + '" id="mm-preview">' + mmRecord + '</div>' +
+      '<div class="mm-minitile val' + Math.min(8192,mmRecord*2) + '" id="mm-goal"><small>META</small><span id="mm-goaltxt">' + (mmRecord*2) + '</span></div>' +
+    '</div>' +
+    '<div id="mm-board">' +
+      '<svg id="mm-svg"><polyline id="mm-line-bg" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round"/><polyline id="mm-line" fill="none" stroke="#27ae60" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
+      '<div class="mm-grid" id="mm-grid"></div>' +
+    '</div>' +
+    '<div class="mm-powers">' +
+      '<button class="mm-power" id="mm-smash-btn" onclick="mmToggleSmash()">🔨 Martillo<small>Rompe 1 ficha</small></button>' +
+      '<button class="mm-power" onclick="mmResetBoard()">🔄 Nuevo Tablero<small>Reiniciar</small></button>' +
+    '</div>' +
+    '<p style="text-align:center;font-size:12px;color:#94a3b8;margin-top:8px;font-weight:800">Mantén apretado y traza la línea: las 2 primeras fichas iguales y luego iguales o el doble (ej: 2 → 2 → 4 → 8).</p>' +
+  '</div>';
+  mmDrawGrid();
+  const bEl = document.getElementById("mm-board");
+  if(bEl){
+    bEl.onpointermove = function(e){
+      if(!mmDragging) return;
+      const target = document.elementFromPoint(e.clientX, e.clientY);
+      if(!target) return;
+      const tile = target.closest(".mmtile");
+      if(tile) mmEnterTile(parseInt(tile.dataset.r,10), parseInt(tile.dataset.c,10));
+    };
+  }
+}
+function mmCalcResult(){
+  if(mmChain.length < 2) return 0;
+  const sum = mmChain.reduce((acc, p)=>acc + mmBoard[p.r][p.c], 0);
+  let p = 2;
+  while(p < sum) p *= 2;
+  return p;
+}
+function mmDrawGrid(mergedPos, droppedCols){
+  const g = document.getElementById("mm-grid");
+  if(!g) return;
+  g.innerHTML = "";
+  const highest = Math.max.apply(null, mmBoard.reduce((a,b)=>a.concat(b), []));
+  for(let r=0;r<MM_ROWS;r++){
+    for(let c=0;c<MM_COLS;c++){
+      const v = mmBoard[r][c];
+      const d = document.createElement("div");
+      d.className = "mmtile val" + Math.min(8192, v);
+      if(v === highest && v >= 32) d.classList.add("king");
+      if(mergedPos && mergedPos.r===r && mergedPos.c===c) d.classList.add("pop-anim");
+      else if(droppedCols && droppedCols.has(c)) d.classList.add("drop-anim");
+      d.dataset.r = r; d.dataset.c = c;
+      d.innerHTML = '<span class="mmtxt">' + v + '</span>';
+      d.onpointerdown = function(ev){ ev.preventDefault(); mmStartTile(r, c); };
+      d.onpointerenter = function(){ mmEnterTile(r, c); };
+      g.appendChild(d);
+    }
+  }
+}
+function mmStartTile(r, c){
+  if(mmSmash){
+    for(let row=r; row>0; row--) mmBoard[row][c] = mmBoard[row-1][c];
+    mmBoard[0][c] = mmRandVal();
+    mmSmash = false;
+    const btn = document.getElementById("mm-smash-btn");
+    if(btn) btn.classList.remove("active-mode");
+    sfx.ok();
+    mmDrawGrid(null, new Set([c]));
+    return;
+  }
+  mmDragging = true;
+  mmChain = [{r:r, c:c}];
+  tone(280, 0.08, 0, "sine", 0.14);
+  mmUpdateTrace();
+}
+function mmEnterTile(r, c){
+  if(!mmDragging) return;
+  const last = mmChain[mmChain.length-1];
+  if(last.r===r && last.c===c) return;
+  if(mmChain.length >= 2){
+    const prev = mmChain[mmChain.length-2];
+    if(prev.r===r && prev.c===c){
+      mmChain.pop();
+      tone(260 + mmChain.length*38, 0.07, 0, "sine", 0.12);
+      mmUpdateTrace();
+      return;
+    }
+  }
+  if(mmChain.some(p=>p.r===r && p.c===c)) return;
+  if(Math.abs(last.r - r) > 1 || Math.abs(last.c - c) > 1) return;
+  const cand = mmBoard[r][c], prevVal = mmBoard[last.r][last.c];
+  const valid = (mmChain.length === 1) ? (cand === prevVal) : (cand === prevVal || cand === prevVal * 2);
+  if(valid){
+    mmChain.push({r:r, c:c});
+    tone(280 + mmChain.length*42, 0.08, 0, "sine", 0.15);
+    mmUpdateTrace();
+  }
+}
+function mmUpdateTrace(){
+  document.querySelectorAll(".mmtile").forEach(el=>{
+    const r = parseInt(el.dataset.r,10), c = parseInt(el.dataset.c,10);
+    el.classList.toggle("sel", mmChain.some(p=>p.r===r && p.c===c));
+  });
+  const boardEl = document.getElementById("mm-board");
+  if(!boardEl) return;
+  const bRect = boardEl.getBoundingClientRect();
+  const pts = mmChain.map(p=>{
+    const t = document.querySelector('.mmtile[data-r="' + p.r + '"][data-c="' + p.c + '"]');
+    if(!t) return "0,0";
+    const tr = t.getBoundingClientRect();
+    return (tr.left - bRect.left + tr.width/2) + "," + (tr.top - bRect.top + tr.height/2);
+  }).join(" ");
+  const l1 = document.getElementById("mm-line");
+  const l2 = document.getElementById("mm-line-bg");
+  if(l1) l1.setAttribute("points", pts);
+  if(l2) l2.setAttribute("points", pts);
+  if(mmChain.length >= 1){
+    const previewVal = mmChain.length >= 2 ? mmCalcResult() : mmBoard[mmChain[0].r][mmChain[0].c];
+    if(l1) l1.setAttribute("stroke", MM_COLORS[previewVal] || "#27ae60");
+    const prevEl = document.getElementById("mm-preview");
+    if(prevEl){
+      prevEl.textContent = previewVal;
+      prevEl.className = "mm-minitile center val" + Math.min(8192, previewVal);
+    }
+  }
+}
+window.addEventListener("pointerup", function(){
+  if(!mmDragging) return;
+  mmDragging = false;
+  if(mmChain.length >= 2){
+    const resVal = mmCalcResult();
+    const dest = mmChain[mmChain.length-1];
+    const cols = new Set(mmChain.map(p=>p.c));
+    const len = mmChain.length;
+
+    mmChain.slice(0,-1).forEach(p=>{ mmBoard[p.r][p.c] = null; });
+    mmBoard[dest.r][dest.c] = resVal;
+
+    cols.forEach(c=>{
+      const surv = [];
+      for(let r=MM_ROWS-1; r>=0; r--){
+        if(mmBoard[r][c] !== null) surv.push(mmBoard[r][c]);
+      }
+      while(surv.length < MM_ROWS) surv.push(mmRandVal());
+      for(let r=MM_ROWS-1, i=0; r>=0; r--, i++) mmBoard[r][c] = surv[i];
+    });
+
+    mmScore += resVal;
+    sfx.ok();
+    const scEl = document.getElementById("mm-score");
+    if(scEl) scEl.textContent = mmScore;
+
+    if(resVal > mmRecord){
+      mmRecord = resVal;
+      regOk("juegos", "Récord en Mates Merge: " + resVal);
+      speak("¡Nuevo récord! Llegaste al " + resVal);
+    } else if(len >= 5){
+      regOk("juegos", "Combo x" + len + " en Mates Merge");
+      speak("¡Combo de " + len + " fichas! Subes al " + resVal);
+    }
+
+    const recEl = document.getElementById("mm-rec");
+    if(recEl) recEl.textContent = mmRecord;
+    const goalTxt = document.getElementById("mm-goaltxt");
+    if(goalTxt) goalTxt.textContent = mmRecord * 2;
+
+    mmChain = [];
+    const l1 = document.getElementById("mm-line"), l2 = document.getElementById("mm-line-bg");
+    if(l1) l1.setAttribute("points","");
+    if(l2) l2.setAttribute("points","");
+    mmDrawGrid(dest, cols);
+  } else {
+    mmChain = [];
+    mmUpdateTrace();
+  }
+});
+function mmToggleSmash(){
+  mmSmash = !mmSmash;
+  const btn = document.getElementById("mm-smash-btn");
+  if(btn) btn.classList.toggle("active-mode", mmSmash);
+}
+function mmResetBoard(){
+  mmBoard = []; mmScore = 0;
+  mountJuegoActivo();
+}
+
+// ----- JUEGO 2: SONIDO INICIAL Y SÍLABAS (ORTOGRAFÍA 100% CORRECTA + TOLERANCIA AL NIÑO) -----
+const SILABAS_WORDS = [
+  { w:"guitarra", s:["gui","ta","rra"], e:"🎸", tip:"Lleva una 'u' silenciosa en gui-ta-rra." },
+  { w:"teléfono", s:["te","lé","fo","no"], e:"☎️", tip:"Lleva tilde mágica en la sílaba lé: te-lé-fo-no." },
+  { w:"mariposa", s:["ma","ri","po","sa"], e:"🦋", tip:"Cuatro sílabas: ma-ri-po-sa." },
+  { w:"elefante", s:["e","le","fan","te"], e:"🐘", tip:"Empieza con e: e-le-fan-te." },
+  { w:"tortuga",  s:["tor","tu","ga"],     e:"🐢", tip:"Tres sílabas: tor-tu-ga." },
+  { w:"árbol",    s:["ár","bol"],          e:"🌳", tip:"Lleva tilde en ár-bol." }
+];
+let silIdx = 0, silPicked = [];
+function renderSonidoInicial(container){
+  const item = SILABAS_WORDS[silIdx % SILABAS_WORDS.length];
+  silPicked = [];
+  const shuffled = item.s.slice().sort(()=>Math.random()-0.5);
+  container.innerHTML = '<div class="card" style="text-align:center">' +
+    '<h2>🔤 Sílabas Mágicas · Arma o escribe la palabra</h2>' +
+    '<div class="scene" style="font-size:64px">' + item.e + '</div>' +
+    '<p style="font-weight:900;font-size:18px;margin-bottom:8px">Toca las sílabas en orden para formar <b>"' + item.w.toUpperCase() + '"</b>:</p>' +
+    '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0">' +
+      shuffled.map(s=>'<button class="bigbtn" style="background:#8b5cf6;font-size:22px;padding:12px 22px" onclick="pickSilaba(\'' + s + '\')">' + s + '</button>').join("") +
+    '</div>' +
+    '<div class="phrasebar" id="sil-bar" style="margin:12px 0;font-size:22px;font-weight:900;color:#6d28d9">…</div>' +
+    '<div class="inputrow" style="max-width:340px;margin:10px auto">' +
+      '<input id="sil-inp" placeholder="O escríbela aquí como te salga…" style="text-align:center">' +
+    '</div>' +
+    '<div style="display:flex;gap:8px;justify-content:center">' +
+      '<button class="bigbtn" style="background:#22c55e" onclick="checkSilabaEscrita()">✅ Comprobar escritura</button>' +
+      '<button class="bigbtn" style="background:#0ea5e9" onclick="silIdx++;mountJuegoActivo()">⏭️ Otra palabra</button>' +
+    '</div>' +
+    '<div id="sil-fb"></div></div>';
+}
+function pickSilaba(s){
+  const item = SILABAS_WORDS[silIdx % SILABAS_WORDS.length];
+  silPicked.push(s);
+  sfx.tap();
+  document.getElementById("sil-bar").textContent = silPicked.join(" - ");
+  if(silPicked.join("") === item.w){
+    regOk("juegos", "Armó por sílabas: " + item.w);
+    document.getElementById("sil-fb").innerHTML = '<p class="feedback ok">🎉 ¡Excelente! ' + item.s.join(" - ") + '</p>';
+    speak("¡Excelente! " + item.w);
+  } else if(silPicked.length >= item.s.length){
+    sfx.bad();
+    silPicked = [];
+    setTimeout(()=>{ const b=document.getElementById("sil-bar"); if(b) b.textContent="Intenta de nuevo…"; }, 500);
+  }
+}
+function checkSilabaEscrita(){
+  const item = SILABAS_WORDS[silIdx % SILABAS_WORDS.length];
+  const raw = (document.getElementById("sil-inp").value||"").trim();
+  if(!raw) return;
+  const fb = document.getElementById("sil-fb");
+  if(raw.toLowerCase() === item.w.toLowerCase()){
+    regOk("juegos", "Escribió perfecto: " + item.w);
+    fb.innerHTML = '<p class="feedback ok">🎉 ¡Lo escribiste perfecto con todas sus letras: <b>' + item.s.join("-") + '</b>!</p>';
+    speak("¡Perfecto! " + item.w);
+  } else if(normChildKey(raw) === normChildKey(item.w)){
+    regOk("juegos", "Escribió (con apoyo): " + item.w);
+    fb.innerHTML = '<p class="feedback ok">🌟 ¡Muy bien! Se entiende genial. Recuerda su secreto mágico: se escribe <b>' + item.s.join(" - ") + '</b> (' + item.tip + ')</p>';
+    speak("¡Muy bien! " + item.tip);
+  } else {
+    sfx.bad();
+    fb.innerHTML = '<p class="feedback bad">Mira las sílabas moradas de arriba para guiarte 🤔</p>';
+  }
+}
+
+// ----- JUEGO 3: CAZADOR DE SUMAS -----
+let csTimer = null;
+function csStop(){ if(csTimer){ clearInterval(csTimer); csTimer = null; } }
+function renderCazadorSumas(container){
+  const a = 1 + Math.floor(Math.random()*6), b = 1 + Math.floor(Math.random()*6);
+  const ans = a + b;
+  const ops = [ans, ans+1, ans+2, Math.max(1, ans-1)].sort(()=>Math.random()-0.5);
+  container.innerHTML = '<div class="card" style="text-align:center">' +
+    '<h2>🎈 Cazador de Sumas · Toca el globo correcto</h2>' +
+    '<div class="mathprob">' + a + ' + ' + b + ' = ?</div>' +
+    '<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:16px 0">' +
+      ops.map(o=>'<button class="bigbtn floaty" style="width:82px;height:96px;border-radius:50%;font-size:26px;background:#f43f5e" onclick="csCheck(' + o + ',' + ans + ')">🎈<br>' + o + '</button>').join("") +
+    '</div><div id="cs-fb"></div></div>';
+}
+function csCheck(o, ans){
+  const fb = document.getElementById("cs-fb");
+  if(o === ans){
+    regOk("juegos", "Cazador de sumas");
+    if(fb) fb.innerHTML = '<p class="feedback ok">🎉 ¡Globo atrapado!</p>';
+    setTimeout(mountJuegoActivo, 1100);
+  } else {
+    sfx.bad();
+    if(fb) fb.innerHTML = '<p class="feedback bad">¡Sigue intentando! 🎈</p>';
+  }
+}
+
+// ----- JUEGO 4: TORRE DE MATES -----
+let torrePisos = 1;
+function renderTorreMates(container){
+  const a = 1 + Math.floor(Math.random()*5), b = 1 + Math.floor(Math.random()*5);
+  const ans = a + b;
+  const ops = [ans, ans+1, Math.max(1, ans-1)].sort(()=>Math.random()-0.5);
+  let towerBlocks = "";
+  for(let i=0;i<torrePisos;i++){
+    towerBlocks += '<div style="background:linear-gradient(90deg,#f59e0b,#eab308);color:#fff;font-weight:900;padding:6px;border-radius:10px;width:' + Math.max(40, 90 - i*6) + '%;margin:3px auto">🏢 Piso ' + (torrePisos - i) + '</div>';
+  }
+  container.innerHTML = '<div class="card" style="text-align:center">' +
+    '<h2>🏗️ Torre de Mates · Piso ' + torrePisos + '</h2>' +
+    '<div style="min-height:90px;padding:10px">' + towerBlocks + '</div>' +
+    '<div class="mathprob">' + a + ' + ' + b + ' = ?</div>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(3,1fr)">' +
+      ops.map(o=>'<button class="qopt" style="font-size:22px" onclick="torreCheck(' + o + ',' + ans + ')">' + o + '</button>').join("") +
+    '</div></div>';
+}
+function torreCheck(o, ans){
+  if(o === ans){
+    torrePisos++;
+    regOk("juegos", "Torre de Mates piso " + torrePisos);
+    mountJuegoActivo();
+  } else {
+    sfx.bad(); toast("🏗️ ¡Casi se mueve la torre, prueba otro!");
+  }
+}
+
+// ----- JUEGO 5: LLUVIA DE PALABRAS -----
+let llTimer = null;
+function llStop(){ if(llTimer){ clearInterval(llTimer); llTimer = null; } }
+function renderLluviaPalabras(container){
+  const palabras = [
+    { e:"🐶", w:"perro" }, { e:"🐱", w:"gato" }, { e:"🌞", w:"sol" },
+    { e:"🌙", w:"luna" }, { e:"🎸", w:"guitarra" }, { e:"☎️", w:"teléfono" }
+  ];
+  const target = palabras[Math.floor(Math.random()*palabras.length)];
+  const ops = [target].concat(palabras.filter(x=>x.w!==target.w).sort(()=>Math.random()-0.5).slice(0,2)).sort(()=>Math.random()-0.5);
+  speak("Atrapa la palabra " + target.w);
+  container.innerHTML = '<div class="card" style="text-align:center">' +
+    '<h2>🌧️ Lluvia de Palabras · Toca: <b>' + target.e + ' ' + target.w.toUpperCase() + '</b></h2>' +
+    '<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;padding:20px 0">' +
+      ops.map(o=>'<button class="bigbtn floaty" style="background:#0ea5e9;font-size:20px;padding:16px 22px" onclick="llCheck(\'' + o.w + '\',\'' + target.w + '\')">☁️ ' + o.w + '</button>').join("") +
+    '</div></div>';
+}
+function llCheck(w, target){
+  if(w === target){
+    regOk("juegos", "Atrapó la palabra: " + w);
+    setTimeout(mountJuegoActivo, 900);
+  } else {
+    sfx.bad();
+  }
+}
+
+// ----- JUEGO 6: MEMORAMA -----
+let memoCards = [], memoFlipped = [], memoMatched = [];
+function renderMemorama(container){
+  if(memoCards.length === 0 || memoMatched.length === memoCards.length){
+    const icons = ["🐶","🐱","🐲","🦖","🦄","🚀"];
+    memoCards = icons.concat(icons).sort(()=>Math.random()-0.5);
+    memoFlipped = []; memoMatched = [];
+  }
+  container.innerHTML = '<div class="card" style="text-align:center">' +
+    '<h2>🃏 Memorama · Encuentra los pares</h2>' +
+    '<div class="gridbtns" style="grid-template-columns:repeat(4,1fr);max-width:420px;margin:0 auto">' +
+      memoCards.map((ic, idx)=>{
+        const open = memoFlipped.includes(idx) || memoMatched.includes(idx);
+        return '<button class="chip" style="height:76px;font-size:34px;background:' + (open?'#fef9c3':'#334155') + ';color:#fff" onclick="memoTap(' + idx + ')">' + (open ? ic : '❓') + '</button>';
+      }).join("") +
+    '</div></div>';
+}
+function memoTap(idx){
+  if(memoFlipped.length >= 2 || memoFlipped.includes(idx) || memoMatched.includes(idx)) return;
+  sfx.tap();
+  memoFlipped.push(idx);
+  mountJuegoActivo();
+  if(memoFlipped.length === 2){
+    const a = memoFlipped[0], b = memoFlipped[1];
+    if(memoCards[a] === memoCards[b]){
+      memoMatched.push(a, b);
+      memoFlipped = [];
+      sfx.ok();
+      if(memoMatched.length === memoCards.length){
+        regOk("juegos", "Completó el Memorama");
+        toast("🏆 ¡Memorama completado!");
+      }
+      setTimeout(mountJuegoActivo, 400);
+    } else {
+      setTimeout(()=>{ memoFlipped = []; mountJuegoActivo(); }, 750);
+    }
+  }
+}
+
+// ----- JUEGO 7: BURBUJAS QUE SUMAN -----
+function renderBurbujas(container){
+  const target = 4 + Math.floor(Math.random()*7);
+  const a = Math.floor(target/2), b = target - a;
+  const ops = [
+    { txt: a + " + " + b, ok:true },
+    { txt: (a+1) + " + " + (b+1), ok:false },
+    { txt: Math.max(1,a-1) + " + " + b, ok:false }
+  ].sort(()=>Math.random()-0.5);
+  container.innerHTML = '<div class="card" style="text-align:center">' +
+    '<h2>🫧 Burbujas que Suman · ¿Cuál da <b>' + target + '</b>?</h2>' +
+    '<div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:18px 0">' +
+      ops.map(o=>'<button class="bigbtn floaty" style="background:#06b6d4;border-radius:99px;font-size:22px;padding:20px 26px" onclick="burbujaTap(' + o.ok + ')">🫧 ' + o.txt + '</button>').join("") +
+    '</div></div>';
+}
+function burbujaTap(isOk){
+  if(isOk){
+    regOk("juegos", "Burbujas que suman");
+    setTimeout(mountJuegoActivo, 900);
+  } else {
+    sfx.bad();
+  }
+}
+
+// ===== MODO PAPÁ (PANEL PARENTAL COMPLETO) =====
+SCREENS.dad = function(){
+  ensureToday();
+  const rows = WORLDS.map(w=>{
+    const st = S.worlds[w.id] || {ok:0,err:0,clicks:0};
+    return '<tr><td>' + w.emoji + ' ' + w.name + '</td><td>' + st.ok + ' ⭐</td><td>' + st.err + '</td><td>Nv ' + worldLevel(w.id) + '</td></tr>';
+  }).join("");
+
+  return '<div class="card">' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">' +
+      '<h2>👨‍👩‍👦 Panel para Adultos (Modo Papá)</h2>' +
+      '<button class="bigbtn" style="background:#0ea5e9;padding:8px 16px" onclick="go(\'home\')">🏠 Volver al juego</button>' +
+    '</div>' +
+    '<div class="statgrid">' +
+      '<div class="stat"><b>' + S.totalStars + '</b><small>Estrellas totales</small></div>' +
+      '<div class="stat"><b>' + Math.round(S.today.minutes) + ' min</b><small>Tiempo hoy</small></div>' +
+      '<div class="stat"><b>' + S.today.ok + '</b><small>Logros hoy</small></div>' +
+    '</div>' +
+    '<h2>👶 Nombre, edad y modo</h2>' +
+    '<div class="inputrow" style="margin-bottom:8px"><input id="dad-name" value="' + S.name + '" onchange="S.name=this.value||\'Darius\';save();toast(\'Nombre actualizado\')"></div>' +
+    '<div class="agebtns">' +
+      [3,4,5,6,7,8].map(a=>'<button class="' + (S.age===a?'sel':'') + '" onclick="S.age=' + a + ';save();go(\'dad\',{back:true})">' + a + ' años</button>').join("") +
+      '<button class="' + (!esNina()?'sel':'') + '" onclick="setGenero(\'nino\')">👦 Niño</button>' +
+      '<button class="' + (esNina()?'sel':'') + '" onclick="setGenero(\'nina\')">👧 Niña</button>' +
+    '</div>' +
+    '<h2 style="margin-top:14px">📊 Progreso por mundo</h2>' +
+    '<table class="stats"><thead><tr><th>Mundo</th><th>Aciertos</th><th>Intentos</th><th>Nivel</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+    '<div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">' +
+      '<button class="bigbtn" style="background:#ef4444;flex:1" onclick="resetProgressConfirm()">🗑️ Reiniciar progreso a cero</button>' +
+    '</div>' +
+  '</div>';
+};
+
+function resetProgressConfirm(){
+  askAdultConfirmation(function(){
+    localStorage.removeItem("gdpro2");
+    S = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    save();
+    toast("Progreso reiniciado a cero");
+    go("home");
+  }, "Confirma la multiplicación para borrar todo el progreso.");
+}
+
+// ---------- INICIO SEGURO ----------
+window.addEventListener("DOMContentLoaded", function(){
+  go("home");
+});
+</script>
+</body>
+</html>
